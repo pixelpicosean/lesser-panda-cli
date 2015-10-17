@@ -40,10 +40,13 @@ function server(gameDir) {
           exclude: /node_modules/,
           loader: 'babel'
         },
-      ]
+      ],
+    },
+    resolve: {
+      root: gameDir,
     },
     resolveLoader: {
-      root: path.join(__dirname, 'node_modules')
+      root: path.join(__dirname, 'node_modules'),
     },
   };
 
