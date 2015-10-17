@@ -11,7 +11,7 @@ var port = 4000;
 var gameDir = process.cwd();
 
 var config = {
-  devtool: 'eval',
+  devtool: 'eval-source-map',
   entry: {
     app: [
       path.resolve(gameDir, 'game/main.js')
@@ -30,6 +30,18 @@ var config = {
       filename: 'index.html'
     }),
   ],
+  module: {
+    loaders: [
+      {
+        test: /\.js?$/,
+        exclude: /node_modules/,
+        loader: 'babel'
+      },
+    ]
+  },
+  resolveLoader: {
+    root: path.join(__dirname, 'node_modules')
+  },
 };
 
 var compiler = webpack(config);
