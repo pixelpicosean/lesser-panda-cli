@@ -29,6 +29,9 @@ function server(gameDir) {
         inject: 'body',
         filename: 'index.html'
       }),
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify('development'),
+      }),
     ],
     module: {
       loaders: [
