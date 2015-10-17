@@ -1,3 +1,5 @@
+'use strict';
+
 var commands = {
   build: 'Build project to "dist" folder',
   create: 'Create new project',
