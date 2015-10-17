@@ -1,61 +1,27 @@
-#!/usr/bin/env node
+var commands = {
+  build: 'Build project to "dist" folder',
+  create: 'Create new project',
+  update: 'Update engine',
+  server: 'Start a dev server',
+  lint: 'Validate your code',
+};
 
-var path = require('path');
-
-var webpack = require('webpack');
-var HTMLWebpackPlugin = require('html-webpack-plugin');
-var WebpackDevServer = require('webpack-dev-server');
-
-// TODO: find an available port
-var port = 4000;
-var gameDir = process.cwd();
-
-var config = {
-  devtool: 'eval-source-map',
-  entry: {
-    app: [
-      path.resolve(gameDir, 'game/main.js')
-    ]
-  },
-  output: {
-    path: path.resolve(gameDir, 'dist'),
-    publicPath: 'http://localhost:4000/',
-    filename: 'bundle.js'
-  },
-  plugins: [
-    new HTMLWebpackPlugin({
-      reloadScript: 'http://localhost:' + port + '/webpack-dev-server.js',
-      template: path.resolve(gameDir, 'index.html'),
-      inject: 'body',
-      filename: 'index.html'
-    }),
-  ],
-  module: {
-    loaders: [
-      {
-        test: /\.js?$/,
-        exclude: /node_modules/,
-        loader: 'babel'
-      },
-    ]
-  },
-  resolveLoader: {
-    root: path.join(__dirname, 'node_modules')
+var lpanda = {
+  help: function() {
+    var data = require('./package.json');
+    console.log(data.description + ' ' + data.version);
+    console.log('');
+    console.log('Usage: lpanda <command> [options]');
+    console.log('');
+    console.log('Commands:');
+    for (var name in commands) {
+      console.log('       ' + name + '\t' + commands[name]);
+    }
   },
 };
 
-var compiler = webpack(config);
+for (var name in commands) {
+  lpanda[name] = require('./' + name);
+}
 
-var server = new WebpackDevServer(compiler, {
-  hot: false,
-
-  quiet: false,
-  noInfo: false,
-  lazy: false,
-
-  stats: {
-    colors: true,
-  },
-});
-server.listen(port, "localhost", function() {});
-// server.close();
+module.exports = lpanda;
