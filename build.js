@@ -5,6 +5,8 @@ var HTMLWebpackPlugin = require('html-webpack-plugin');
 var rimraf = require('rimraf');
 
 function build(gameDir) {
+  process.env.NODE_ENV = 'production';
+
   var config = {
     entry: {
       app: [
