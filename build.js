@@ -25,7 +25,9 @@ function build(gameDir) {
         template: path.resolve(gameDir, 'index.html'),
         inject: 'body',
         filename: 'index.html',
-        // TODO: add minify configs
+        minify: {
+          removeComments: true,
+        },
       }),
       new webpack.optimize.UglifyJsPlugin({
         compressor: {
@@ -41,7 +43,7 @@ function build(gameDir) {
       loaders: [
         {
           test: /\.js?$/,
-          exclude: /node_modules/,
+          exclude: /node_modules|engine\/pixi/,
           loader: 'babel',
         },
       ],
