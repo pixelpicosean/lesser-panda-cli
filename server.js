@@ -14,7 +14,7 @@ function server(gameDir) {
     devtool: 'eval-source-map',
     entry: {
       app: [
-        path.resolve(gameDir, 'game/main.js')
+        path.resolve(gameDir, 'src/game/main.js')
       ]
     },
     output: {
@@ -37,13 +37,18 @@ function server(gameDir) {
       loaders: [
         {
           test: /\.js?$/,
-          exclude: /node_modules/,
+          exclude: /node_modules|engine\/pixi/,
           loader: 'babel'
+        },
+        {
+          test: /\.vert|\.frag$/,
+          exclude: /node_modules/,
+          loader: 'raw'
         },
       ],
     },
     resolve: {
-      root: gameDir,
+      root: path.join(gameDir, 'src'),
     },
     resolveLoader: {
       root: path.join(__dirname, 'node_modules'),
