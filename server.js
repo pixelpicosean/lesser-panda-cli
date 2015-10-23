@@ -19,8 +19,10 @@ function server(gameDir) {
     },
     output: {
       path: path.resolve(gameDir, 'dist'),
-      publicPath: 'http://localhost:4000/',
       filename: 'bundle.js'
+    },
+    devServer: {
+      contentBase: gameDir,
     },
     plugins: [
       new HTMLWebpackPlugin({
