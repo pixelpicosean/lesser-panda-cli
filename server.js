@@ -13,9 +13,7 @@ function server(gameDir) {
   var config = {
     devtool: 'eval-source-map',
     entry: {
-      app: [
-        path.resolve(gameDir, 'src/game/main.js')
-      ]
+      app: path.resolve(gameDir, 'src/game/main.js'),
     },
     output: {
       path: path.resolve(gameDir, 'dist'),
@@ -77,8 +75,6 @@ function server(gameDir) {
     console.log(' URL: http://localhost:4000');
     console.log(' --------------------------\n');
   });
-  // FIXME: is it nessary to close server from code?
-  // devServer.close();
 }
 
 module.exports = server;
