@@ -11,9 +11,7 @@ function build(gameDir) {
 
   var config = {
     entry: {
-      app: [
-        path.resolve(gameDir, 'game/main.js'),
-      ]
+      app: path.resolve(gameDir, 'src/game/main.js'),
     },
     output: {
       path: path.resolve(gameDir, 'dist'),
@@ -47,6 +45,9 @@ function build(gameDir) {
           loader: 'babel',
         },
       ],
+    },
+    resolve: {
+      root: path.join(gameDir, 'src'),
     },
     resolveLoader: {
       root: path.join(__dirname, 'node_modules'),

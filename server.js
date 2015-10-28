@@ -11,7 +11,6 @@ var port = 4000;
 
 function server(gameDir) {
   var config = {
-    // devtool: 'eval-source-map',
     devtool: 'source-map',
     entry: {
       app: path.resolve(gameDir, 'src/game/main.js'),
