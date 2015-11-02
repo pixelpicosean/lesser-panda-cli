@@ -11,7 +11,7 @@ var port = 4000;
 
 function server(gameDir) {
   var config = {
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
     entry: {
       app: path.resolve(gameDir, 'src/game/main.js'),
     },
@@ -36,8 +36,8 @@ function server(gameDir) {
     module: {
       loaders: [
         {
-          test: /\.js?$/,
-          exclude: /node_modules|engine\/pixi/,
+          test: /game\/.+\.js?$/,
+          exclude: /node_modules/,
           loader: 'babel'
         },
         {
