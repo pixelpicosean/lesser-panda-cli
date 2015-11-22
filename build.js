@@ -41,7 +41,7 @@ function build(gameDir) {
       loaders: [
         {
           test: /\.js?$/,
-          exclude: /node_modules|engine\/pixi/,
+          exclude: /node_modules|engine/,
           loader: 'babel',
         },
       ],
