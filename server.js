@@ -53,14 +53,14 @@ function server(gameDir) {
     module: {
       loaders: [
         {
-          test: /game\/.+\.js?$/,
-          exclude: /node_modules/,
-          loader: 'babel'
+          test: /\.js?$/,
+          exclude: /node_modules|engine/,
+          loader: 'babel',
         },
         {
           test: /\.vert|\.frag$/,
           exclude: /node_modules/,
-          loader: 'raw'
+          loader: 'raw',
         },
       ],
     },

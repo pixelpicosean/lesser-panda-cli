@@ -27,27 +27,34 @@ function build(gameDir) {
           removeComments: true,
         },
       }),
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      }),
       new webpack.optimize.UglifyJsPlugin({
         compressor: {
           warnings: false,
           screw_ie8: true,
-        }
-      }),
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        },
       }),
     ],
     module: {
       loaders: [
         {
+          // TODO: exclude whole engine folder but still uglify the result
           test: /\.js?$/,
-          exclude: /node_modules|engine/,
+          exclude: /node_modules|engine\/(async|canvas|earcut|eventemitter|howler|reactive|resource|pixi|polyfill)/,
           loader: 'babel',
+        },
+        {
+          test: /\.vert|\.frag$/,
+          exclude: /node_modules/,
+          loader: 'raw',
         },
       ],
     },
     resolve: {
       root: path.join(gameDir, 'src'),
+      fallback: path.join(__dirname, 'node_modules'),
     },
     resolveLoader: {
       root: path.join(__dirname, 'node_modules'),
