@@ -26,7 +26,7 @@ var fullAddress = getIPAddress() + ':' + port;
 
 function server(gameDir) {
   var config = {
-    devtool: '#eval-source-map',
+    devtool: '#source-map',
     entry: {
       app: [
         'webpack-dev-server/client?http://' + fullAddress,
@@ -53,13 +53,14 @@ function server(gameDir) {
     module: {
       loaders: [
         {
-          test: /\.js?$/,
-          exclude: /node_modules|webpack-dev-server|src\/engine/,
+          test: /\.js$/,
+          include: path.resolve(gameDir, 'src'),
+          exclude: /src\/engine/,
           loader: 'babel',
         },
         {
           test: /\.vert|\.frag$/,
-          exclude: /node_modules/,
+          include: path.resolve(gameDir, 'src/engine'),
           loader: 'raw',
         },
       ],
