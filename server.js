@@ -54,7 +54,7 @@ function server(gameDir) {
       loaders: [
         {
           test: /\.js?$/,
-          exclude: /node_modules|src\/engine/,
+          exclude: /node_modules|webpack-dev-server|src\/engine/,
           loader: 'babel',
         },
         {
