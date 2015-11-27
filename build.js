@@ -39,11 +39,10 @@ function build(gameDir) {
     ],
     module: {
       loaders: [
-        // TODO: exclude whole engine folder but still uglify the result
         {
           test: /\.js$/,
           include: path.resolve(gameDir, 'src'),
-          exclude: /node_modules|engine\/(async|canvas|earcut|eventemitter|howler|reactive|resource|pixi|polyfill)/,
+          exclude: /src\/engine/,
           loader: 'babel',
         },
         {
