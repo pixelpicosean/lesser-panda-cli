@@ -50,6 +50,11 @@ function build(gameDir) {
           include: path.resolve(gameDir, 'src/engine'),
           loader: 'raw',
         },
+        {
+          test: /\.css$/,
+          include: path.resolve(gameDir, 'src'),
+          loader: 'style!css-loader?modules',
+        },
       ],
     },
     resolve: {
