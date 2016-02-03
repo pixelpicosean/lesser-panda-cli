@@ -68,6 +68,10 @@ function server(gameDir) {
           include: path.resolve(gameDir, 'src'),
           loader: 'style!css-loader?modules',
         },
+        {
+          test: /\.jpg|\.png$/,
+          loader: 'file-loader',
+        },
       ],
     },
     resolve: {
