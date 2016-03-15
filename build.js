@@ -44,6 +44,11 @@ function build(gameDir) {
           include: path.resolve(gameDir, 'src'),
           exclude: /src\/engine/,
           loader: 'babel',
+          query: {
+            presets: [
+              path.join(__dirname, 'node_modules/babel-preset-es2015'),
+            ],
+          },
         },
         {
           test: /\.vert|\.frag$/,
