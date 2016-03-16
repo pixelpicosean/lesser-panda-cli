@@ -5,8 +5,6 @@ Commandline tool for [LesserPanda engine](https://github.com/pixelpicosean/lesse
 ## Support ES2015 features:
 
 - es2015
-- stage-0
-- stage-1
 - stage-2
 
 ## Usage

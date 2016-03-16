@@ -60,6 +60,7 @@ function server(gameDir) {
           query: {
             presets: [
               path.join(__dirname, 'node_modules/babel-preset-es2015'),
+              path.join(__dirname, 'node_modules/babel-preset-stage-2'),
             ],
           },
         },
