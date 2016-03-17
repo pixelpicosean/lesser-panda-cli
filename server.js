@@ -98,15 +98,21 @@ function server(gameDir) {
     lazy: false,
 
     stats: {
+      assets: false,
       colors: true,
+      version: false,
+      timings: true,
+      hash: false,
+      chunks: true,
+      chunkModules: false,
     },
   });
   devServer.listen(port, null, function() {
     // TODO: purple "LP" and red url
     console.log('[LP] Server started:');
-    console.log(' --------------------------');
+    console.log(' ---------------------------------');
     console.log(' URL: http://' + fullAddress);
-    console.log(' --------------------------\n');
+    console.log(' ---------------------------------\n');
   });
 }
 
