@@ -1,6 +1,10 @@
 'use strict';
 
+var BASE_PORT = 4000;
+
 var path = require('path');
+var portfinder = require('portfinder');
+portfinder.basePort = BASE_PORT;
 
 var webpack = require('webpack');
 var HTMLWebpackPlugin = require('html-webpack-plugin');
@@ -20,11 +24,9 @@ function getIPAddress() {
   return '0.0.0.0';
 }
 
-// TODO: find an available port or manually set one
-var port = 4000;
-var fullAddress = getIPAddress() + ':' + port;
+function server(gameDir, port) {
+  var fullAddress = getIPAddress() + ':' + port;
 
-function server(gameDir) {
   var config = {
     devtool: '#eval-source-map',
     entry: {
@@ -107,6 +109,7 @@ function server(gameDir) {
       chunkModules: false,
     },
   });
+
   devServer.listen(port, null, function() {
     // TODO: purple "LP" and red url
     console.log('[LP] Server started:');
@@ -116,4 +119,8 @@ function server(gameDir) {
   });
 }
 
-module.exports = server;
+module.exports = function(gameDir) {
+  portfinder.getPort(function(err, realPort) {
+    server(gameDir, realPort);
+  });
+};
