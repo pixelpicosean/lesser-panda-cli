@@ -48,6 +48,9 @@ function build(gameDir) {
             presets: [
               path.join(__dirname, 'node_modules/babel-preset-es2015'),
             ],
+            plugins: [
+              [path.join(__dirname, 'node_modules/babel-plugin-transform-es2015-classes'), { loose: true }],
+            ],
           },
         },
         {
