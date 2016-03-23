@@ -14,7 +14,8 @@ Commandline tool for [LesserPanda engine](https://github.com/pixelpicosean/lesse
 
 ### Build production bundle
 
-`lpanda build`
+- `lpanda build`: compile and bundle to `game.min.js`
+- `lpanda build -u`: compile and bundle without minify(uglify)
 
 ## TODO
 
