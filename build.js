@@ -6,8 +6,10 @@ var webpack = require('webpack');
 var HTMLWebpackPlugin = require('html-webpack-plugin');
 var rimraf = require('rimraf');
 
-function build(gameDir) {
+function build(gameDir, callback, param) {
   process.env.NODE_ENV = 'production';
+
+  var minify = param.indexOf('-u') < 0;
 
   var config = {
     entry: {
@@ -29,12 +31,6 @@ function build(gameDir) {
       }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      }),
-      new webpack.optimize.UglifyJsPlugin({
-        compressor: {
-          warnings: false,
-          screw_ie8: true,
-        },
       }),
     ],
     module: {
@@ -74,13 +70,22 @@ function build(gameDir) {
     },
   };
 
+  if (minify) {
+    config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+      compressor: {
+        warnings: false,
+        screw_ie8: true,
+      },
+    }));
+  }
+
   // Cleanup dist folder before compile
   rimraf(path.resolve(gameDir, 'dist'), function(err) {
     // Compile and build JavaScript
     var compiler = webpack(config);
     compiler.run(function(err, stats) {
       if (err) {
-        throw err;
+        callback(err);
       }
       console.log('[LP] Build complete.');
     });
