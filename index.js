@@ -1,11 +1,11 @@
 'use strict';
 
 var commands = {
-  build: 'Build project to "dist" folder',
-  create: 'Create new project',
-  update: 'Update engine',
+  build: 'Build project to "dist" folder, with "-u" to disable uglify',
+  // create: 'Create new project',
+  // update: 'Update engine',
   server: 'Start a dev server',
-  lint: 'Validate your code',
+  // lint: 'Validate your code',
 };
 
 var lpanda = {

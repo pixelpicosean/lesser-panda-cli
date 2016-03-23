@@ -122,8 +122,11 @@ function server(gameDir, port) {
   });
 }
 
-module.exports = function(gameDir) {
+module.exports = function(gameDir, callback) {
   portfinder.getPort(function(err, realPort) {
+    if (err) {
+      callback(err);
+    }
     server(gameDir, realPort);
   });
 };
