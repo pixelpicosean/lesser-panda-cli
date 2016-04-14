@@ -12,6 +12,7 @@
     "css-loader": "^0.23.1",
     "file-loader": "^0.8.5",
     "html-webpack-plugin": "^2.15.0",
+    "immutable": "^3.7.6",
     "portfinder": "^1.0.3",
     "raw-loader": "^0.5.1",
     "rimraf": "^2.4.3",
