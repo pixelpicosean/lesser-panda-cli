@@ -13,6 +13,7 @@ var WebpackDevServer = require('webpack-dev-server');
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 var colors = require('colors/safe');
+var cliPrefix = require('./utils').cliPrefix;
 
 function getIPAddress() {
   var interfaces = require('os').networkInterfaces();
@@ -129,8 +130,8 @@ function server(gameDir, port, proxyPort) {
   });
 
   devServer.listen(proxyPort, null, function() {
-    console.log('[' + colors.blue('LP') + ']' + colors.green(' Server starting...'));
-    console.log('[' + colors.blue('LP') + ']' + colors.bold(' Access URLS:'));
+    console.log(cliPrefix + colors.green(' Server starting...'));
+    console.log(cliPrefix + colors.bold(' Access URLS:'));
     console.log(colors.grey('--------------------------------------'));
     console.log('      Local: ' + colors.magenta('http://localhost:' + port));
     console.log('   External: ' + colors.magenta('http://' + fullAddress));

@@ -6,8 +6,13 @@ var webpack = require('webpack');
 var HTMLWebpackPlugin = require('html-webpack-plugin');
 var rimraf = require('rimraf');
 
+var colors = require('colors/safe');
+var cliPrefix = require('./utils').cliPrefix;
+
 function build(gameDir, callback, param) {
   process.env.NODE_ENV = 'production';
+
+  console.log(cliPrefix + ' Start to build...');
 
   var minify = param.indexOf('-u') < 0;
 
@@ -64,7 +69,6 @@ function build(gameDir, callback, param) {
     },
     resolve: {
       root: path.join(gameDir, 'src'),
-      fallback: path.join(__dirname, 'node_modules'),
     },
     resolveLoader: {
       root: path.join(__dirname, 'node_modules'),
@@ -88,7 +92,7 @@ function build(gameDir, callback, param) {
       if (err) {
         callback(err);
       }
-      console.log('[LP] Build complete.');
+      console.log(cliPrefix + colors.green(' Build complete!'));
     });
   });
 }
