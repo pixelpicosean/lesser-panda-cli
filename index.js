@@ -2,7 +2,7 @@
 
 var commands = {
   build: 'Build project to "dist" folder, with "-u" to disable uglify',
-  // create: 'Create new project',
+  create: 'Create new project',
   // update: 'Update engine',
   server: 'Start a dev server',
   // lint: 'Validate your code',
