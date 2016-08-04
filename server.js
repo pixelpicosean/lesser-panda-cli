@@ -1,6 +1,7 @@
 'use strict';
 
 var BASE_PORT = 4000;
+var PROXY_PORT = 4100;
 
 var path = require('path');
 var portfinder = require('portfinder');
@@ -9,6 +10,7 @@ portfinder.basePort = BASE_PORT;
 var webpack = require('webpack');
 var HTMLWebpackPlugin = require('html-webpack-plugin');
 var WebpackDevServer = require('webpack-dev-server');
+var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 function getIPAddress() {
   var interfaces = require('os').networkInterfaces();
@@ -24,14 +26,14 @@ function getIPAddress() {
   return '0.0.0.0';
 }
 
-function server(gameDir, port) {
-  var fullAddress = getIPAddress() + ':' + port;
+function server(gameDir, port, proxyPort) {
+  var ipAddress = getIPAddress();
+  var fullAddress = ipAddress + ':' + port;
 
   var config = {
     devtool: '#eval-source-map',
     entry: {
       app: [
-        'webpack-dev-server/client?http://' + fullAddress,
         path.resolve(gameDir, 'src/game/main.js')
       ],
     },
@@ -42,6 +44,7 @@ function server(gameDir, port) {
     devServer: {
       contentBase: gameDir,
     },
+    watch: true,
     plugins: [
       new HTMLWebpackPlugin({
         template: path.resolve(gameDir, 'index.html'),
@@ -50,6 +53,14 @@ function server(gameDir, port) {
       }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('development'),
+      }),
+      new BrowserSyncPlugin({
+        host: process.env.IP || 'localhost',
+        port: process.env.PORT || port,
+        proxy: 'http://' + ipAddress + ':' + proxyPort,
+        open: false,
+        reload: true,
+        ghostMode: false,
       }),
     ],
     module: {
@@ -87,7 +98,7 @@ function server(gameDir, port) {
     },
     resolve: {
       root: path.join(gameDir, 'src'),
-      fallback: path.join(__dirname, 'node_modules'),
+      // fallback: path.join(__dirname, 'node_modules'),
     },
     resolveLoader: {
       root: path.join(__dirname, 'node_modules'),
@@ -109,17 +120,14 @@ function server(gameDir, port) {
       version: false,
       timings: true,
       hash: false,
-      chunks: true,
+      chunks: false,
       chunkModules: false,
     },
   });
 
-  devServer.listen(port, null, function() {
+  devServer.listen(proxyPort, null, function() {
     // TODO: purple "LP" and red url
-    console.log('[LP] Server started:');
-    console.log(' ---------------------------------');
-    console.log(' URL: http://' + fullAddress);
-    console.log(' ---------------------------------\n');
+    console.log('[LP] Server starting...');
   });
 }
 
@@ -128,6 +136,12 @@ module.exports = function(gameDir, callback) {
     if (err) {
       callback(err);
     }
-    server(gameDir, realPort);
+    portfinder.basePort = PROXY_PORT;
+    portfinder.getPort(function(err, proxyPort) {
+      if (err) {
+        callback(err);
+      }
+      server(gameDir, realPort, proxyPort);
+    });
   });
 };
