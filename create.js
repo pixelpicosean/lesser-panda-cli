@@ -5,21 +5,12 @@ var download = require('download');
 var path = require('path');
 
 var colors = require('colors/safe');
-var cliPrefix = require('./utils').cliPrefix;
+var utils = require('./utils');
+
+var cliPrefix = utils.cliPrefix;
+var rmdir = utils.rmdir;
 
 var engineUrl = 'https://github.com/pixelpicosean/lesser-panda/archive/master.zip';
-
-function rmdir(dir) {
-  var files = fs.readdirSync(dir);
-  for (var i = 0; i < files.length; i++) {
-    var filename = path.join(dir, files[i]);
-    var stat = fs.statSync(filename);
-
-    if (stat.isDirectory()) rmdir(filename);
-    else fs.unlinkSync(filename);
-  }
-  fs.rmdirSync(dir);
-}
 
 function create(dir, callback, params) {
   var folder = params[0];
