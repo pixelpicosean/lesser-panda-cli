@@ -5,8 +5,13 @@ Commandline tool for [LesserPanda engine](https://github.com/pixelpicosean/lesse
 ## Support ES2015 features:
 
 - es2015
+- Class property
 
 ## Usage
+
+### Create a new project
+
+`lpanda create MyAwesomeGame`
 
 ### Start a dev server
 
@@ -19,5 +24,5 @@ Commandline tool for [LesserPanda engine](https://github.com/pixelpicosean/lesse
 
 ## TODO
 
-- [ ] Project generating command
+- [x] Project generating command
 - [ ] Engine upgrade command
