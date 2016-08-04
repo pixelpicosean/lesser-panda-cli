@@ -61,6 +61,7 @@ function server(gameDir, port, proxyPort) {
         open: false,
         reload: true,
         ghostMode: false,
+        logLevel: 'silent',
       }),
     ],
     module: {
@@ -127,7 +128,7 @@ function server(gameDir, port, proxyPort) {
 
   devServer.listen(proxyPort, null, function() {
     // TODO: purple "LP" and red url
-    console.log('[LP] Server starting...');
+    console.log('[LP] Server starting at\n\n  http://' + fullAddress + '\n');
   });
 }
 
