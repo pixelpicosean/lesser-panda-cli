@@ -5,7 +5,6 @@ var commands = {
   create: 'Create new project',
   // update: 'Update engine',
   server: 'Start a dev server',
-  // lint: 'Validate your code',
 };
 
 var lpanda = {
