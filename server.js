@@ -76,11 +76,12 @@ function server(gameDir, port, proxyPort) {
           loader: 'babel',
           query: {
             presets: [
-              path.join(__dirname, 'node_modules/babel-preset-es2015'),
+              [path.join(__dirname, 'node_modules/babel-preset-es2015'), { loose: true }],
             ],
             plugins: [
               [path.join(__dirname, 'node_modules/babel-plugin-transform-class-properties'), { loose: true }],
               [path.join(__dirname, 'node_modules/babel-plugin-transform-es2015-classes'), { loose: true }],
+              [path.join(__dirname, 'node_modules/babel-plugin-transform-strict-mode'), { strict: true }],
             ],
           },
         },
