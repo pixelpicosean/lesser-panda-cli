@@ -1,11 +1,12 @@
-# LesserPanda CLI (WIP)
+# LesserPanda CLI
 
 Commandline tool for [LesserPanda engine](https://github.com/pixelpicosean/lesser-panda)
 
-## Support ES2015 features:
+## Support JavaScript features:
 
 - es2015
 - Class property
+- force strict mode
 
 ## Usage
 

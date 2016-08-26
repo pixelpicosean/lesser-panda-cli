@@ -1,7 +1,6 @@
 'use strict';
 
 var BASE_PORT = 4000;
-var PROXY_PORT = 4100;
 
 var path = require('path');
 var portfinder = require('portfinder');
@@ -10,7 +9,6 @@ portfinder.basePort = BASE_PORT;
 var webpack = require('webpack');
 var HTMLWebpackPlugin = require('html-webpack-plugin');
 var WebpackDevServer = require('webpack-dev-server');
-var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 var colors = require('colors/safe');
 var cliPrefix = require('./utils').cliPrefix;
@@ -29,7 +27,7 @@ function getIPAddress() {
   return '0.0.0.0';
 }
 
-function server(gameDir, port, proxyPort) {
+function server(gameDir, port) {
   var ipAddress = getIPAddress();
   var fullAddress = ipAddress + ':' + port;
 
@@ -37,6 +35,7 @@ function server(gameDir, port, proxyPort) {
     devtool: '#eval-source-map',
     entry: {
       app: [
+        'webpack-dev-server/client?http://' + fullAddress,
         path.resolve(gameDir, 'src/game/main.js')
       ],
     },
@@ -52,19 +51,13 @@ function server(gameDir, port, proxyPort) {
       new HTMLWebpackPlugin({
         template: path.resolve(gameDir, 'index.html'),
         inject: 'body',
-        filename: 'index.html'
+        cache: true,
+        hash: true,
+        showErrors: true,
+        filename: 'index.html',
       }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('development'),
-      }),
-      new BrowserSyncPlugin({
-        host: process.env.IP || 'localhost',
-        port: process.env.PORT || port,
-        proxy: 'http://' + ipAddress + ':' + proxyPort,
-        open: false,
-        reload: true,
-        ghostMode: false,
-        logLevel: 'silent',
       }),
     ],
     module: {
@@ -76,11 +69,12 @@ function server(gameDir, port, proxyPort) {
           loader: 'babel',
           query: {
             presets: [
-              path.join(__dirname, 'node_modules/babel-preset-es2015'),
+              [path.join(__dirname, 'node_modules/babel-preset-es2015'), { loose: true }],
             ],
             plugins: [
               [path.join(__dirname, 'node_modules/babel-plugin-transform-class-properties'), { loose: true }],
               [path.join(__dirname, 'node_modules/babel-plugin-transform-es2015-classes'), { loose: true }],
+              [path.join(__dirname, 'node_modules/babel-plugin-transform-strict-mode'), { strict: true }],
             ],
           },
         },
@@ -102,7 +96,7 @@ function server(gameDir, port, proxyPort) {
     },
     resolve: {
       root: path.join(gameDir, 'src'),
-      // fallback: path.join(__dirname, 'node_modules'),
+      fallback: path.join(__dirname, 'node_modules'),
     },
     resolveLoader: {
       root: path.join(__dirname, 'node_modules'),
@@ -129,8 +123,8 @@ function server(gameDir, port, proxyPort) {
     },
   });
 
-  devServer.listen(proxyPort, null, function() {
-    console.log(cliPrefix + colors.green(' Server starting...'));
+  devServer.listen(port, null, function() {
+    console.log(cliPrefix + colors.green(' Server(v' + require('./package.json').version + ') is starting...'));
     console.log(cliPrefix + colors.bold(' Access URLS:'));
     console.log(colors.grey('--------------------------------------'));
     console.log('      Local: ' + colors.magenta('http://localhost:' + port));
@@ -144,12 +138,6 @@ module.exports = function(gameDir, callback) {
     if (err) {
       callback(err);
     }
-    portfinder.basePort = PROXY_PORT;
-    portfinder.getPort(function(err, proxyPort) {
-      if (err) {
-        callback(err);
-      }
-      server(gameDir, realPort, proxyPort);
-    });
+    server(gameDir, realPort);
   });
 };
