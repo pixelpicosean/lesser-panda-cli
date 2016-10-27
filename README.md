@@ -4,9 +4,8 @@ Commandline tool for [LesserPanda engine](https://github.com/pixelpicosean/lesse
 
 ## Support JavaScript features:
 
-- es2015
-- Class property
-- force strict mode
+- es2015 (loose mode for better performance)
+- force strict for every single file
 
 ## Usage
 
