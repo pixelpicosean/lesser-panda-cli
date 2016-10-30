@@ -65,7 +65,6 @@ function server(gameDir, port) {
         {
           test: /\.js$/,
           include: path.resolve(gameDir, 'src'),
-          exclude: /src\/engine/,
           loader: 'babel',
           query: {
             presets: [

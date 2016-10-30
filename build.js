@@ -43,7 +43,6 @@ function build(gameDir, callback, param) {
         {
           test: /\.js$/,
           include: path.resolve(gameDir, 'src'),
-          exclude: /src\/engine/,
           loader: 'babel',
           query: {
             presets: [
