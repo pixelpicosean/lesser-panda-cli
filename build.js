@@ -43,6 +43,7 @@ function build(gameDir, callback, param) {
         {
           test: /\.js$/,
           include: path.resolve(gameDir, 'src'),
+          exclude: [path.resolve(gameDir, 'src/engine/pixi')],
           loader: 'babel',
           query: {
             presets: [

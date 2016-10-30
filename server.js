@@ -65,6 +65,7 @@ function server(gameDir, port) {
         {
           test: /\.js$/,
           include: path.resolve(gameDir, 'src'),
+          exclude: [path.resolve(gameDir, 'src/engine/pixi')],
           loader: 'babel',
           query: {
             presets: [
