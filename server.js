@@ -13,6 +13,8 @@ var WebpackDevServer = require('webpack-dev-server');
 var colors = require('colors/safe');
 var cliPrefix = require('./utils').cliPrefix;
 
+var es5Loader = require('./es5Loader');
+
 function getIPAddress() {
   var interfaces = require('os').networkInterfaces();
   for (var devName in interfaces) {
@@ -27,7 +29,7 @@ function getIPAddress() {
   return '0.0.0.0';
 }
 
-function server(gameDir, port) {
+function server(gameDir, port, es5) {
   var ipAddress = getIPAddress();
   var fullAddress = ipAddress + ':' + port;
 
@@ -41,7 +43,7 @@ function server(gameDir, port) {
     },
     output: {
       path: path.resolve(gameDir, 'dist'),
-      filename: 'bundle.js'
+      filename: 'game.dev.js'
     },
     devServer: {
       contentBase: gameDir,
@@ -62,20 +64,6 @@ function server(gameDir, port) {
     ],
     module: {
       loaders: [
-        {
-          test: /\.js$/,
-          include: path.resolve(gameDir, 'src'),
-          exclude: [path.resolve(gameDir, 'src/engine/pixi')],
-          loader: 'babel',
-          query: {
-            presets: [
-              [path.join(__dirname, 'node_modules/babel-preset-es2015'), { loose: true }],
-            ],
-            plugins: [
-              [path.join(__dirname, 'node_modules/babel-plugin-transform-strict-mode'), { strict: true }],
-            ],
-          },
-        },
         {
           test: /\.vert|\.frag$/,
           include: path.resolve(gameDir, 'src/engine'),
@@ -100,6 +88,10 @@ function server(gameDir, port) {
       root: path.join(__dirname, 'node_modules'),
     },
   };
+
+  if (es5) {
+    config.module.loaders.push(es5Loader(gameDir));
+  }
 
   var compiler = webpack(config);
 
@@ -131,11 +123,13 @@ function server(gameDir, port) {
   });
 }
 
-module.exports = function(gameDir, callback) {
+module.exports = function(gameDir, callback, param) {
+  var es5 = (param.indexOf('-es5') >= 0);
+
   portfinder.getPort(function(err, realPort) {
     if (err) {
       callback(err);
     }
-    server(gameDir, realPort);
+    server(gameDir, realPort, es5);
   });
 };

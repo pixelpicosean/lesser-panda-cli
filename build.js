@@ -9,12 +9,15 @@ var rimraf = require('rimraf');
 var colors = require('colors/safe');
 var cliPrefix = require('./utils').cliPrefix;
 
+var es5Loader = require('./es5Loader');
+
 function build(gameDir, callback, param) {
   process.env.NODE_ENV = 'production';
 
   console.log(cliPrefix + ' Start to build...');
 
   var minify = param.indexOf('-u') < 0;
+  var es5 = (param.indexOf('-es5') >= 0);
 
   var config = {
     entry: {
@@ -37,18 +40,26 @@ function build(gameDir, callback, param) {
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       }),
+      new webpack.optimize.UglifyJsPlugin({
+        compressor: {
+          warnings: false,
+          screw_ie8: true,
+        },
+        beautify: !minify,
+      }),
     ],
     module: {
       loaders: [
         {
           test: /\.js$/,
           include: path.resolve(gameDir, 'src'),
-          exclude: [path.resolve(gameDir, 'src/engine/pixi')],
+          exclude: [
+            path.resolve(gameDir, 'src/engine/audio/hower.core.js'),
+            path.resolve(gameDir, 'src/engine/polyfill'),
+          ],
           loader: 'babel',
           query: {
-            presets: [
-              [path.join(__dirname, 'node_modules/babel-preset-es2015'), { loose: true }],
-            ],
+            presets: [],
             plugins: [
               [path.join(__dirname, 'node_modules/babel-plugin-transform-strict-mode'), { strict: true }],
             ],
@@ -74,13 +85,10 @@ function build(gameDir, callback, param) {
     },
   };
 
-  if (minify) {
-    config.plugins.push(new webpack.optimize.UglifyJsPlugin({
-      compressor: {
-        warnings: false,
-        screw_ie8: true,
-      },
-    }));
+  if (es5) {
+    config.module.loaders[0].query.presets.push([path.join(__dirname, 'node_modules/babel-preset-es2015'), { loose: true }]);
+  }
+  else {
   }
 
   // Cleanup dist folder before compile
