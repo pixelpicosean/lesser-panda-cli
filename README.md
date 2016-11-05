@@ -4,7 +4,7 @@ Commandline tool for [LesserPanda engine](https://github.com/pixelpicosean/lesse
 
 ## Support JavaScript features:
 
-- es2015 (loose mode for better performance)
+- ES2015 (using **loose mode** for better performance)
 - force strict for every single file
 
 ## Usage
@@ -15,11 +15,13 @@ Commandline tool for [LesserPanda engine](https://github.com/pixelpicosean/lesse
 
 ### Start a dev server
 
-`lpanda server`
+- `lpanda server`: by default **ES6** capatable browser is required, but rebuild pretty fast
+- `lpanda server -es5`: transpile to **ES5** on every single change, rebuild is slower but should work in any browsers without issue.
 
 ### Build production bundle
 
-- `lpanda build`: compile and bundle to `game.min.js`
+- `lpanda build`: compile and bundle to `game.min.js` (Warning: **ES6** scripts won't get transpiled)
+- `lpanda build -es5`: transpile **ES6** to **ES5** (recommended since ES6 is not fully supported by some browsers, especially mobile)
 - `lpanda build -u`: compile and bundle without minify(uglify)
 
 ## TODO
