@@ -1,27 +1,27 @@
 'use strict';
 
-var BASE_PORT = 4000;
+const BASE_PORT = 4000;
 
-var path = require('path');
-var portfinder = require('portfinder');
+const path = require('path');
+const portfinder = require('portfinder');
 portfinder.basePort = BASE_PORT;
 
-var webpack = require('webpack');
-var HTMLWebpackPlugin = require('html-webpack-plugin');
-var WebpackDevServer = require('webpack-dev-server');
+const webpack = require('webpack');
+const HTMLWebpackPlugin = require('html-webpack-plugin');
+const WebpackDevServer = require('webpack-dev-server');
 
-var colors = require('colors/safe');
-var cliPrefix = require('./utils').cliPrefix;
+const colors = require('colors/safe');
+const cliPrefix = require('./utils').cliPrefix;
 
-var es5Loader = require('./es5Loader');
+const es5Loader = require('./es5Loader');
 
 function getIPAddress() {
-  var interfaces = require('os').networkInterfaces();
-  for (var devName in interfaces) {
-    var iface = interfaces[devName];
+  const interfaces = require('os').networkInterfaces();
+  for (let devName in interfaces) {
+    let iface = interfaces[devName];
 
-    for (var i = 0; i < iface.length; i++) {
-      var alias = iface[i];
+    for (let i = 0; i < iface.length; i++) {
+      let alias = iface[i];
       if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal)
         return alias.address;
     }
@@ -30,14 +30,14 @@ function getIPAddress() {
 }
 
 function server(gameDir, port, es5) {
-  var ipAddress = getIPAddress();
-  var fullAddress = ipAddress + ':' + port;
+  const ipAddress = getIPAddress();
+  const fullAddress = `${ipAddress}:${port}`;
 
-  var config = {
+  const config = {
     devtool: '#source-map',
     entry: {
       app: [
-        'webpack-dev-server/client?http://' + fullAddress,
+        `webpack-dev-server/client?http://${fullAddress}`,
         path.resolve(gameDir, 'src/game/main.js')
       ],
     },
@@ -93,9 +93,9 @@ function server(gameDir, port, es5) {
     config.module.loaders.push(es5Loader(gameDir));
   }
 
-  var compiler = webpack(config);
+  const compiler = webpack(config);
 
-  var devServer = new WebpackDevServer(compiler, {
+  const devServer = new WebpackDevServer(compiler, {
     hot: false,
 
     quiet: false,
@@ -117,14 +117,14 @@ function server(gameDir, port, es5) {
     console.log(cliPrefix + colors.green(' Server(v' + require('./package.json').version + ') is starting...'));
     console.log(cliPrefix + colors.bold(' Access URLS:'));
     console.log(colors.grey('--------------------------------------'));
-    console.log('      Local: ' + colors.magenta('http://localhost:' + port));
-    console.log('   External: ' + colors.magenta('http://' + fullAddress));
+    console.log(`      Local: ${colors.magenta('http://localhost:' + port)}`);
+    console.log(`   External: ${colors.magenta('http://' + fullAddress)}`);
     console.log(colors.grey('--------------------------------------'));
   });
 }
 
 module.exports = function(gameDir, callback, param) {
-  var es5 = (param.indexOf('-es5') >= 0);
+  const es5 = (param.indexOf('-es5') >= 0);
 
   portfinder.getPort(function(err, realPort) {
     if (err) {

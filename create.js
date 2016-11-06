@@ -1,36 +1,36 @@
 'use strict';
 
-var fs = require('fs');
-var download = require('download');
-var path = require('path');
+const fs = require('fs');
+const download = require('download');
+const path = require('path');
 
-var colors = require('colors/safe');
-var utils = require('./utils');
+const colors = require('colors/safe');
+const utils = require('./utils');
 
-var cliPrefix = utils.cliPrefix;
-var rmdir = utils.rmdir;
+const cliPrefix = utils.cliPrefix;
+const rmdir = utils.rmdir;
 
-var engineUrl = 'https://github.com/pixelpicosean/lesser-panda/archive/master.zip';
+const engineUrl = 'https://github.com/pixelpicosean/lesser-panda/archive/master.zip';
 
 function create(dir, callback, params) {
-  var folder = params[0];
-  if (!folder) return callback(cliPrefix + colors.red(' Project name not set!'));
-  console.log(cliPrefix + ' Creating project "' + folder + '"');
+  const folder = params[0];
+  if (!folder) return callback(`${cliPrefix} ${colors.red('Project name not set!')}`);
+  console.log(`${cliPrefix} Creating project "${folder}"`);
 
-  var projectFolder = dir + '/' + folder;
+  const projectFolder = `${dir}/${folder}`;
 
   function createProject() {
     fs.mkdir(projectFolder, function(err) {
-      if (err) return callback(cliPrefix + colors.red(' Error creating project folder: ' + projectFolder));
+      if (err) return callback(`${cliPrefix} ${colors.red('Error creating project folder: ' + projectFolder)}`);
 
       // TODO: cache
-      var wget = download(engineUrl, projectFolder, {
+      const wget = download(engineUrl, projectFolder, {
         extract: true,
         strip: 1,
       });
 
       wget.then(function() {
-        console.log(cliPrefix + colors.green(' Project "' + folder + '" created!'));
+        console.log(`${cliPrefix} ${colors.green('Project "' + folder + '" created!')}`);
       });
 
       wget.on('error', function(err) {
@@ -51,4 +51,4 @@ function create(dir, callback, params) {
   });
 };
 
-module.exports = exports = create;
+module.exports = create;

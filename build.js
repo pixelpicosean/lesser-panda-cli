@@ -1,25 +1,25 @@
 'use strict';
 
-var path = require('path');
+const path = require('path');
 
-var webpack = require('webpack');
-var HTMLWebpackPlugin = require('html-webpack-plugin');
-var rimraf = require('rimraf');
+const webpack = require('webpack');
+const HTMLWebpackPlugin = require('html-webpack-plugin');
+const rimraf = require('rimraf');
 
-var colors = require('colors/safe');
-var cliPrefix = require('./utils').cliPrefix;
+const colors = require('colors/safe');
+const cliPrefix = require('./utils').cliPrefix;
 
-var es5Loader = require('./es5Loader');
+const es5Loader = require('./es5Loader');
 
 function build(gameDir, callback, param) {
   process.env.NODE_ENV = 'production';
 
-  console.log(cliPrefix + ' Start to build...');
+  console.log(`${cliPrefix} Start to build...`);
 
-  var minify = param.indexOf('-u') < 0;
-  var es5 = (param.indexOf('-es5') >= 0);
+  const minify = param.indexOf('-u') < 0;
+  const es5 = (param.indexOf('-es5') >= 0);
 
-  var config = {
+  const config = {
     entry: {
       app: path.resolve(gameDir, 'src/game/main.js'),
     },
@@ -94,12 +94,12 @@ function build(gameDir, callback, param) {
   // Cleanup dist folder before compile
   rimraf(path.resolve(gameDir, 'dist'), function(err) {
     // Compile and build JavaScript
-    var compiler = webpack(config);
+    const compiler = webpack(config);
     compiler.run(function(err, stats) {
       if (err) {
         callback(err);
       }
-      console.log(cliPrefix + colors.green(' Build complete!'));
+      console.log(`${cliPrefix} ${colors.green('Build complete!')}`);
     });
   });
 }
