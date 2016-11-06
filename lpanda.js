@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-var lpanda = require('./index');
-var command = process.argv[2];
+const lpanda = require('./index');
+const command = process.argv[2];
 
 if (!lpanda[command]) command = 'help';
 
