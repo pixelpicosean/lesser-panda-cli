@@ -4,8 +4,14 @@ Commandline tool for [LesserPanda engine](https://github.com/pixelpicosean/lesse
 
 ## Support JavaScript features:
 
-- ES2015 (using **loose mode** for better performance)
+- es2015 (using **loose mode** for better performance)
 - force strict for every single file
+
+## Support Node.js
+
+You need a **es2015** capatable Node.js.
+
+Any Node.js version that supports **es2015** should work, although only `v7.0.0` tested.
 
 ## Usage
 
