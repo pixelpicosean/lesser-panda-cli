@@ -40,13 +40,6 @@ function build(gameDir, callback, param) {
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       }),
-      new webpack.optimize.UglifyJsPlugin({
-        compressor: {
-          warnings: false,
-          screw_ie8: true,
-        },
-        beautify: !minify,
-      }),
     ],
     module: {
       loaders: [
@@ -85,10 +78,19 @@ function build(gameDir, callback, param) {
     },
   };
 
+  // Need to transpile to ES5?
   if (es5) {
     config.module.loaders[0].query.presets.push([path.join(__dirname, 'node_modules/babel-preset-es2015'), { loose: true }]);
-  }
-  else {
+
+    // Uglify does not support ES6 for now, so we move it here
+    if (minify) {
+      config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+        compressor: {
+          warnings: false,
+          screw_ie8: true,
+        },
+      }));
+    }
   }
 
   // Cleanup dist folder before compile

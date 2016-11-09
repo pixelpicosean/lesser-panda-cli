@@ -26,9 +26,9 @@ Any Node.js version that supports **es2015** should work, although only `v7.0.0`
 
 ### Build production bundle
 
-- `lpanda build`: compile and bundle to `game.min.js` (Warning: **ES6** scripts won't get transpiled)
+- `lpanda build`: compile and bundle to `game.min.js` (Warning: **ES6** scripts won't get transpiled, and **uglify** doesn't work)
 - `lpanda build -es5`: transpile **ES6** to **ES5** (recommended since ES6 is not fully supported by some browsers, especially mobile)
-- `lpanda build -u`: compile and bundle without minify(uglify)
+- `lpanda build -es5 -u`: transpile and bundle without minify(uglify)
 
 ## TODO
 
