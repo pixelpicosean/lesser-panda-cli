@@ -3,7 +3,6 @@
 const path = require('path');
 
 const webpack = require('webpack');
-const HTMLWebpackPlugin = require('html-webpack-plugin');
 const rimraf = require('rimraf');
 
 const colors = require('colors/safe');
@@ -21,22 +20,14 @@ function build(gameDir, callback, param) {
 
   const config = {
     entry: {
-      app: path.resolve(gameDir, 'src/game/main.js'),
+      game: path.resolve(gameDir, 'src/game/main.js'),
     },
     output: {
       path: path.resolve(gameDir, 'dist'),
-      filename: 'game.min.js',
+      filename: '[name].js',
     },
     plugins: [
       new webpack.optimize.OccurenceOrderPlugin(),
-      new HTMLWebpackPlugin({
-        template: path.resolve(gameDir, 'index.html'),
-        inject: 'body',
-        filename: 'index.html',
-        minify: {
-          removeComments: true,
-        },
-      }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       }),
