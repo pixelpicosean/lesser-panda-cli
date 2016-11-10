@@ -7,7 +7,6 @@ const portfinder = require('portfinder');
 portfinder.basePort = BASE_PORT;
 
 const webpack = require('webpack');
-const HTMLWebpackPlugin = require('html-webpack-plugin');
 const WebpackDevServer = require('webpack-dev-server');
 
 const colors = require('colors/safe');
@@ -36,28 +35,20 @@ function server(gameDir, port, es5) {
   const config = {
     devtool: '#source-map',
     entry: {
-      app: [
+      game: [
         `webpack-dev-server/client?http://${fullAddress}`,
         path.resolve(gameDir, 'src/game/main.js')
       ],
     },
     output: {
       path: path.resolve(gameDir, 'dist'),
-      filename: 'game.dev.js'
+      filename: '[name].js',
     },
     devServer: {
       contentBase: gameDir,
     },
     watch: true,
     plugins: [
-      new HTMLWebpackPlugin({
-        template: path.resolve(gameDir, 'index.html'),
-        inject: 'body',
-        cache: true,
-        hash: true,
-        showErrors: true,
-        filename: 'index.html',
-      }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('development'),
       }),
