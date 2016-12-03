@@ -2,16 +2,18 @@
 
 Commandline tool for [LesserPanda engine](https://github.com/pixelpicosean/lesser-panda)
 
-## Support JavaScript features:
+## Features:
 
-- es2015 (using **loose mode** for better performance)
-- force strict for every single file
+- CommonJS (including image, shader and font loading support)
+- Automatically convert resource files (image or font) that are less than 10kb to data url
+- ES6 (using **loose mode** if requests Babel transpile for better performance)
+- Force strict for every single file (if request Babel transpile)
 
 ## Support Node.js
 
-You need a **es2015** capatable Node.js.
+You need a **ES6** capatable Node.js.
 
-Any Node.js version that supports **es2015** should work, although only `v7.0.0` tested.
+Any Node.js version that supports **ES6** should work, although only `v7.0.0` tested.
 
 ## Usage
 
