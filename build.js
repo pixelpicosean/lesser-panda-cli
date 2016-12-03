@@ -49,15 +49,44 @@ function build(gameDir, callback, param) {
             ],
           },
         },
+        // Shaders
         {
-          test: /\.vert|\.frag$/,
+          test: /\.(vert|frag)$/,
           include: path.resolve(gameDir, 'src/engine'),
           loader: 'raw',
         },
+        // Styles
         {
           test: /\.css$/,
           include: path.resolve(gameDir, 'src'),
-          loader: 'style!css-loader?modules',
+          loader: 'style!css?modules',
+        },
+        // Images, will be convert to data url if less than 10kb
+        // Note: use `require()` to fetch
+        {
+          test: /\.(jpg|png|gif)$/,
+          loader: 'url?limit=10000',
+        },
+        // Fonts
+        {
+          test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'url?limit=10000&mimetype=application/font-woff'
+        },
+        {
+          test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'url?limit=10000&mimetype=application/font-woff'
+        },
+        {
+          test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'url?limit=10000&mimetype=application/octet-stream'
+        },
+        {
+          test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'file'
+        },
+        {
+          test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+          loader: 'url?limit=10000&mimetype=image/svg+xml'
         },
       ],
     },
