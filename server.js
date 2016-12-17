@@ -57,8 +57,8 @@ function server(gameDir, port, es5) {
       loaders: [
         // Shaders
         {
-          test: /\.(vert|frag)$/,
-          include: path.resolve(gameDir, 'src/engine'),
+          test: /\.(vert|frag|vs|fs)$/,
+          include: path.resolve(gameDir, 'src'),
           loader: 'raw',
         },
         // Styles
