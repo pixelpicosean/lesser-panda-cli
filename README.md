@@ -1,6 +1,7 @@
 # LesserPanda CLI
 
 Commandline tool for [LesserPanda engine](https://github.com/pixelpicosean/lesser-panda)
+Can also be used in any ES6/CommonJS project with similar folder structure.
 
 ## Features:
 
@@ -31,6 +32,21 @@ Any Node.js version that supports **ES6** should work, although only `v7.0.0` te
 - `lpanda build`: compile and bundle to `game.min.js` (Warning: **ES6** scripts won't get transpiled, and **uglify** doesn't work)
 - `lpanda build -es5`: transpile **ES6** to **ES5** (recommended since ES6 is not fully supported by some browsers, especially mobile)
 - `lpanda build -es5 -u`: transpile and bundle without minify(uglify)
+
+### Use for general(non LesserPanda) projects
+
+The only thing you need is a similar project:
+
+- root
+  - src/
+    - game/main.js
+  - index.html
+
+And don't forget to add a script tag in the `index.html` file:
+
+```html
+<script src="game.js"></script>
+```
 
 ## TODO
 
