@@ -33,80 +33,124 @@ function server(gameDir, port, es5) {
   const fullAddress = `${ipAddress}:${port}`;
 
   const config = {
-    devtool: '#source-map',
     entry: {
       game: [
+        // Live-reload
         `webpack-dev-server/client?http://${fullAddress}`,
-        path.resolve(gameDir, 'src/game/main.js')
+        // Game entry
+        path.resolve(gameDir, 'src/game/main.js'),
       ],
     },
     output: {
       path: path.resolve(gameDir, 'dist'),
       filename: '[name].js',
     },
+    devtool: 'source-map',
     devServer: {
       contentBase: gameDir,
     },
-    watch: true,
-    plugins: [
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify('development'),
-      }),
-    ],
     module: {
-      loaders: [
+      rules: [
         // Shaders
         {
           test: /\.(vert|frag|vs|fs)$/,
-          include: path.resolve(gameDir, 'src'),
-          loader: 'raw',
+          include: [path.resolve(gameDir, 'src')],
+          loader: require.resolve('raw-loader'),
         },
         // Styles
         {
           test: /\.css$/,
-          include: path.resolve(gameDir, 'src'),
-          loader: 'style!css?modules',
+          include: [path.resolve(gameDir, 'src')],
+          use: [
+            {
+              loader: 'style-loader',
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+              },
+            },
+          ],
         },
         // Images, will be convert to data url if less than 10kb
         // Note: use `require()` to fetch
         {
           test: /\.(jpg|png|gif)$/,
-          loader: 'url?limit=10000',
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 10000,
+              },
+            },
+          ],
         },
         // Fonts
         {
           test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-          loader: 'url?limit=10000&mimetype=application/font-woff'
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 10000,
+                mimetype: 'application/font-woff',
+              },
+            },
+          ],
         },
         {
           test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-          loader: 'url?limit=10000&mimetype=application/font-woff'
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 10000,
+                mimetype: 'application/font-woff',
+              },
+            },
+          ],
         },
         {
           test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-          loader: 'url?limit=10000&mimetype=application/octet-stream'
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 10000,
+                mimetype: 'application/octet-stream',
+              },
+            },
+          ],
         },
         {
           test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-          loader: 'file'
+          use: ['file-loader'],
         },
         {
           test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-          loader: 'url?limit=10000&mimetype=image/svg+xml'
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 10000,
+                mimetype: 'image/svg+xml',
+              },
+            },
+          ],
         },
       ],
     },
     resolve: {
-      root: path.join(gameDir, 'src'),
-      fallback: path.join(__dirname, 'node_modules'),
-    },
-    resolveLoader: {
-      root: path.join(__dirname, 'node_modules'),
+      modules: [
+        path.join(gameDir, 'src'),
+        path.join(__dirname, 'node_modules'),
+      ],
     },
   };
 
   if (es5) {
-    config.module.loaders.push(es5Loader(gameDir));
+    config.module.rules.push(es5Loader(gameDir));
   }
 
   const compiler = webpack(config);
