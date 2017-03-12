@@ -35,7 +35,9 @@ function server(gameDir, port, es5) {
   const config = {
     entry: {
       game: [
+        // Live-reload
         `webpack-dev-server/client?http://${fullAddress}`,
+        // Game entry
         path.resolve(gameDir, 'src/game/main.js'),
       ],
     },
@@ -148,7 +150,7 @@ function server(gameDir, port, es5) {
   };
 
   if (es5) {
-    // config.module.rules.push(es5Loader(gameDir));
+    config.module.rules.push(es5Loader(gameDir));
   }
 
   const compiler = webpack(config);
