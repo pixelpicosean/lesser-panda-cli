@@ -14,7 +14,7 @@ Can also be used in any ES6/CommonJS project with similar folder structure.
 
 You need a **ES6** capatable Node.js.
 
-Any Node.js version that supports **ES6** should work, although only `v7.0.0` tested.
+Any Node.js version that supports **ES6** should work, `v7.0.0+` tested.
 
 ## Usage
 

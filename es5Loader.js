@@ -10,14 +10,18 @@ module.exports = function(gameDir) {
       path.resolve(gameDir, 'src/engine/audio/hower.core.js'),
       path.resolve(gameDir, 'src/engine/polyfill'),
     ],
-    loader: 'babel',
-    query: {
-      presets: [
-        [path.join(__dirname, 'node_modules/babel-preset-es2015'), { loose: true }],
-      ],
-      plugins: [
-        [path.join(__dirname, 'node_modules/babel-plugin-transform-strict-mode'), { strict: true }],
-      ],
-    },
+    use: [
+      {
+        loader: require.resolve('babel-loader'),
+        options: {
+          presets: [
+            [require.resolve('babel-preset-es2015'), { loose: true }],
+          ],
+          plugins: [
+            [require.resolve('babel-plugin-transform-strict-mode'), { strict: true }],
+          ],
+        },
+      },
+    ],
   };
 };
