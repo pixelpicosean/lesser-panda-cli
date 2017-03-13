@@ -1,6 +1,6 @@
 {
   "name": "lesser-panda-cli",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Command line toolkit for LesserPanda framework",
   "repository": "https://github.com/pixelpicosean/lesser-panda-cli.git",
   "main": "index.js",
@@ -13,6 +13,7 @@
     "css-loader": "^0.27.1",
     "download": "^5.0.3",
     "file-loader": "^0.10.1",
+    "mithril": "^1.0.1",
     "portfinder": "^1.0.13",
     "raw-loader": "^0.5.1",
     "rimraf": "^2.6.1",
