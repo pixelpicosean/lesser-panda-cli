@@ -39,10 +39,10 @@ function build(gameDir, callback, param) {
           include: [path.resolve(gameDir, 'src')],
           use: [
             {
-              loader: 'style-loader',
+              loader: require.resolve('style-loader'),
             },
             {
-              loader: 'css-loader',
+              loader: require.resolve('css-loader'),
               options: {
                 modules: true,
               },
@@ -55,7 +55,7 @@ function build(gameDir, callback, param) {
           test: /\.(jpg|png|gif)$/,
           use: [
             {
-              loader: 'url-loader',
+              loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
               },
@@ -67,7 +67,7 @@ function build(gameDir, callback, param) {
           test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
           use: [
             {
-              loader: 'url-loader',
+              loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
                 mimetype: 'application/font-woff',
@@ -79,7 +79,7 @@ function build(gameDir, callback, param) {
           test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
           use: [
             {
-              loader: 'url-loader',
+              loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
                 mimetype: 'application/font-woff',
@@ -91,7 +91,7 @@ function build(gameDir, callback, param) {
           test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
           use: [
             {
-              loader: 'url-loader',
+              loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
                 mimetype: 'application/octet-stream',
@@ -101,13 +101,13 @@ function build(gameDir, callback, param) {
         },
         {
           test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-          use: ['file-loader'],
+          use: [require.resolve('file-loader')],
         },
         {
           test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
           use: [
             {
-              loader: 'url-loader',
+              loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
                 mimetype: 'image/svg+xml',
