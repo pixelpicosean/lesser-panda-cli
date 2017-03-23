@@ -63,10 +63,10 @@ function server(gameDir, port, es5) {
           include: [path.resolve(gameDir, 'src')],
           use: [
             {
-              loader: 'style-loader',
+              loader: require.resolve('style-loader'),
             },
             {
-              loader: 'css-loader',
+              loader: require.resolve('css-loader'),
               options: {
                 modules: true,
               },
@@ -79,7 +79,7 @@ function server(gameDir, port, es5) {
           test: /\.(jpg|png|gif)$/,
           use: [
             {
-              loader: 'url-loader',
+              loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
               },
@@ -91,7 +91,7 @@ function server(gameDir, port, es5) {
           test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
           use: [
             {
-              loader: 'url-loader',
+              loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
                 mimetype: 'application/font-woff',
@@ -103,7 +103,7 @@ function server(gameDir, port, es5) {
           test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
           use: [
             {
-              loader: 'url-loader',
+              loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
                 mimetype: 'application/font-woff',
@@ -115,7 +115,7 @@ function server(gameDir, port, es5) {
           test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
           use: [
             {
-              loader: 'url-loader',
+              loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
                 mimetype: 'application/octet-stream',
@@ -125,13 +125,13 @@ function server(gameDir, port, es5) {
         },
         {
           test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-          use: ['file-loader'],
+          use: [require.resolve('file-loader')],
         },
         {
           test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
           use: [
             {
-              loader: 'url-loader',
+              loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
                 mimetype: 'image/svg+xml',
