@@ -1,6 +1,6 @@
 {
   "name": "lesser-panda-cli",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Command line toolkit for LesserPanda framework",
   "repository": "https://github.com/pixelpicosean/lesser-panda-cli.git",
   "main": "index.js",
