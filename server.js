@@ -163,6 +163,8 @@ function server(gameDir, port, es5) {
     noInfo: false,
     lazy: false,
 
+    disableHostCheck: true,
+
     stats: {
       assets: false,
       colors: true,
