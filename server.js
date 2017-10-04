@@ -28,9 +28,12 @@ function getIPAddress() {
   return '0.0.0.0';
 }
 
-function server(gameDir, port, es5) {
+function server(gameDir, port, param) {
   const ipAddress = getIPAddress();
   const fullAddress = `${ipAddress}:${port}`;
+
+  const es5 = (param.indexOf('-es5') >= 0);
+  const hasEditor = (param.indexOf('-editor') >= 0);
 
   const config = {
     entry: {
@@ -154,6 +157,16 @@ function server(gameDir, port, es5) {
     config.module.rules.push(es5Loader(gameDir));
   }
 
+  // Need to launch editor?
+  if (hasEditor) {
+    config.entry['editor'] = [
+      // Live-reload
+      `webpack-dev-server/client?http://${fullAddress}`,
+      // Editor entry
+      path.resolve(gameDir, 'src/editor/index.js'),
+    ];
+  }
+
   const compiler = webpack(config);
 
   const devServer = new WebpackDevServer(compiler, {
@@ -187,12 +200,10 @@ function server(gameDir, port, es5) {
 }
 
 module.exports = function(gameDir, callback, param) {
-  const es5 = (param.indexOf('-es5') >= 0);
-
   portfinder.getPort(function(err, realPort) {
     if (err) {
       callback(err);
     }
-    server(gameDir, realPort, es5);
+    server(gameDir, realPort, param);
   });
 };
