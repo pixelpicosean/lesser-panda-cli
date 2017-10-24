@@ -8,6 +8,7 @@ portfinder.basePort = BASE_PORT;
 
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const colors = require('colors/safe');
 const cliPrefix = require('./utils').cliPrefix;
@@ -151,6 +152,20 @@ function server(gameDir, port, param) {
         path.join(__dirname, 'node_modules'),
       ],
     },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: path.resolve(gameDir, 'index.html'),
+        inject: 'body',
+      }),
+      new webpack.optimize.CommonsChunkPlugin({
+        name: 'engine',
+        filename: 'engine.js',
+        minChunks(module, count) {
+          var context = module.context;
+          return context && (context.indexOf('src/engine') >= 0 || context.indexOf('node_modules') >= 0);
+        },
+      }),
+    ],
   };
 
   if (es5) {

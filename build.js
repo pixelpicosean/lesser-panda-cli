@@ -4,6 +4,7 @@ const path = require('path');
 
 const webpack = require('webpack');
 const rimraf = require('rimraf');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const colors = require('colors/safe');
 const cliPrefix = require('./utils').cliPrefix;
@@ -24,7 +25,12 @@ function build(gameDir, callback, param) {
       path: path.resolve(gameDir, 'dist'),
       filename: '[name].js',
     },
-    plugins: [],
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: path.resolve(gameDir, 'index.html'),
+        inject: 'body',
+      }),
+    ],
     module: {
       rules: [
         // Shaders
