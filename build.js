@@ -16,6 +16,7 @@ function build(gameDir, callback, param) {
 
   const minify = param.indexOf('-u') < 0;
   const es5 = (param.indexOf('-es5') >= 0);
+  const split_engine = (param.indexOf('-split') >= 0);
 
   const config = {
     entry: {
@@ -145,6 +146,19 @@ function build(gameDir, callback, param) {
         },
       }));
     }
+  }
+
+  // Split engine scripts into its own file?
+  if (split_engine) {
+    config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
+        name: 'engine',
+        filename: 'engine.js',
+        minChunks(module, count) {
+          var context = module.context;
+          return context && (context.indexOf('src/engine') >= 0 || context.indexOf('node_modules') >= 0);
+        },
+      })
+    );
   }
 
   // Cleanup dist folder before compile
