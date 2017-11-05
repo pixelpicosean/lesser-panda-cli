@@ -8,6 +8,7 @@ portfinder.basePort = BASE_PORT;
 
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const colors = require('colors/safe');
 const cliPrefix = require('./utils').cliPrefix;
@@ -28,9 +29,12 @@ function getIPAddress() {
   return '0.0.0.0';
 }
 
-function server(gameDir, port, es5) {
+function server(gameDir, port, param) {
   const ipAddress = getIPAddress();
   const fullAddress = `${ipAddress}:${port}`;
+
+  const es5 = (param.indexOf('-es5') >= 0);
+  const hasEditor = (param.indexOf('-editor') >= 0);
 
   const config = {
     entry: {
@@ -148,10 +152,34 @@ function server(gameDir, port, es5) {
         path.join(__dirname, 'node_modules'),
       ],
     },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: path.resolve(gameDir, 'index.html'),
+        inject: 'body',
+      }),
+      new webpack.optimize.CommonsChunkPlugin({
+        name: 'engine',
+        filename: 'engine.js',
+        minChunks(module, count) {
+          var context = module.context;
+          return context && (context.indexOf('src/engine') >= 0 || context.indexOf('node_modules') >= 0);
+        },
+      }),
+    ],
   };
 
   if (es5) {
     config.module.rules.push(es5Loader(gameDir));
+  }
+
+  // Need to launch editor?
+  if (hasEditor) {
+    config.entry['editor'] = [
+      // Live-reload
+      `webpack-dev-server/client?http://${fullAddress}`,
+      // Editor entry
+      path.resolve(gameDir, 'src/editor/index.js'),
+    ];
   }
 
   const compiler = webpack(config);
@@ -187,12 +215,10 @@ function server(gameDir, port, es5) {
 }
 
 module.exports = function(gameDir, callback, param) {
-  const es5 = (param.indexOf('-es5') >= 0);
-
   portfinder.getPort(function(err, realPort) {
     if (err) {
       callback(err);
     }
-    server(gameDir, realPort, es5);
+    server(gameDir, realPort, param);
   });
 };

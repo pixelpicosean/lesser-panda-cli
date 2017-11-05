@@ -4,6 +4,7 @@ const path = require('path');
 
 const webpack = require('webpack');
 const rimraf = require('rimraf');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const colors = require('colors/safe');
 const cliPrefix = require('./utils').cliPrefix;
@@ -15,6 +16,7 @@ function build(gameDir, callback, param) {
 
   const minify = param.indexOf('-u') < 0;
   const es5 = (param.indexOf('-es5') >= 0);
+  const split_engine = (param.indexOf('-split') >= 0);
 
   const config = {
     entry: {
@@ -24,7 +26,12 @@ function build(gameDir, callback, param) {
       path: path.resolve(gameDir, 'dist'),
       filename: '[name].js',
     },
-    plugins: [],
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: path.resolve(gameDir, 'index.html'),
+        inject: 'body',
+      }),
+    ],
     module: {
       rules: [
         // Shaders
@@ -139,6 +146,19 @@ function build(gameDir, callback, param) {
         },
       }));
     }
+  }
+
+  // Split engine scripts into its own file?
+  if (split_engine) {
+    config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
+        name: 'engine',
+        filename: 'engine.js',
+        minChunks(module, count) {
+          var context = module.context;
+          return context && (context.indexOf('src/engine') >= 0 || context.indexOf('node_modules') >= 0);
+        },
+      })
+    );
   }
 
   // Cleanup dist folder before compile
