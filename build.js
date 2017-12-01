@@ -17,6 +17,7 @@ function build(gameDir, callback, param) {
   const minify = param.indexOf('-u') < 0;
   const es5 = (param.indexOf('-es5') >= 0);
   const split_engine = (param.indexOf('-split') >= 0);
+  const engine_lib = (param.indexOf('-lib') >= 0);
 
   const config = {
     entry: {
@@ -159,6 +160,28 @@ function build(gameDir, callback, param) {
         },
       })
     );
+  }
+
+  if (engine_lib) {
+    config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
+        name: 'engine',
+        filename: 'engine.js',
+        minChunks(module, count) {
+          var context = module.context;
+          return context && (context.indexOf('src/engine') >= 0 || context.indexOf('node_modules') >= 0);
+        },
+      })
+    );
+    config.entry = {
+      engine: path.resolve(gameDir, 'src/engine/index.js'),
+    };
+    config.output = {
+      path: path.resolve(gameDir, 'dist'),
+      // export itself to a global var
+      libraryTarget: "var",
+      // name of the global var: "v"
+      library: "v",
+    };
   }
 
   // Cleanup dist folder before compile
