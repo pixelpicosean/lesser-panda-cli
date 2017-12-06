@@ -128,6 +128,7 @@ function build(gameDir, callback, param) {
     resolve: {
       modules: [
         path.join(gameDir, 'src'),
+        path.join(gameDir, 'assets'),
         path.join(gameDir, 'node_modules'),
         path.join(__dirname, 'node_modules'),
       ],
