@@ -166,6 +166,9 @@ function server(gameDir, port, param) {
           return context && (context.indexOf('src/engine') >= 0 || context.indexOf('node_modules') >= 0);
         },
       }),
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify('development')
+      }),
     ],
   };
 
