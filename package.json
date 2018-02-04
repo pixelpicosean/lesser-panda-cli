@@ -12,6 +12,7 @@
     "bit-twiddle": "^1.0.2",
     "colors": "^1.1.2",
     "css-loader": "^0.28.7",
+    "deepmerge": "^2.0.1",
     "download": "^6.2.5",
     "earcut": "^2.1.2",
     "eventemitter3": "^3.0.0",
