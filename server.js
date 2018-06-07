@@ -148,6 +148,7 @@ function server(gameDir, port, param) {
     resolve: {
       modules: [
         path.join(gameDir, 'src'),
+        path.join(gameDir, 'assets'),
         path.join(gameDir, 'node_modules'),
         path.join(__dirname, 'node_modules'),
       ],
@@ -164,6 +165,9 @@ function server(gameDir, port, param) {
           var context = module.context;
           return context && (context.indexOf('src/engine') >= 0 || context.indexOf('node_modules') >= 0);
         },
+      }),
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify('development')
       }),
     ],
   };
