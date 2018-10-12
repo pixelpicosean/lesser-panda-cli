@@ -4,7 +4,7 @@ const colors = require('colors/safe');
 const fs = require('fs');
 const path = require('path');
 
-module.exports.cliPrefix = `[${colors.blue('LP')}]`;
+module.exports.cliPrefix = `[${colors.blue('Voltar')}]`;
 
 module.exports.rmdir = function rmdir(dir) {
   const files = fs.readdirSync(dir);

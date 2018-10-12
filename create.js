@@ -10,7 +10,7 @@ const utils = require('./utils');
 const cliPrefix = utils.cliPrefix;
 const rmdir = utils.rmdir;
 
-const engineUrl = 'https://github.com/pixelpicosean/lesser-panda/archive/develop.zip';
+const engineUrl = 'https://github.com/pixelpicosean/voltar/archive/develop.zip';
 
 function create(dir, callback, params) {
   const folder = params[0];

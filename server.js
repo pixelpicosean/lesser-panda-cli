@@ -37,6 +37,7 @@ function server(gameDir, port, param) {
   const hasEditor = (param.indexOf('-editor') >= 0);
 
   const config = {
+    mode: 'development',
     entry: {
       game: [
         // Live-reload
@@ -153,21 +154,15 @@ function server(gameDir, port, param) {
         path.join(__dirname, 'node_modules'),
       ],
     },
+    optimization: {
+      splitChunks: {
+        chunks: "all"
+      }
+    },
     plugins: [
       new HtmlWebpackPlugin({
         template: path.resolve(gameDir, 'index.html'),
         inject: 'body',
-      }),
-      new webpack.optimize.CommonsChunkPlugin({
-        name: 'engine',
-        filename: 'engine.js',
-        minChunks(module, count) {
-          var context = module.context;
-          return context && (context.indexOf('src/engine') >= 0 || context.indexOf('node_modules') >= 0);
-        },
-      }),
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify('development')
       }),
     ],
   };
