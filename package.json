@@ -1,6 +1,6 @@
 {
   "name": "voltar-cli",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Command line toolkit for Voltar engine",
   "repository": "https://github.com/pixelpicosean/voltar-cli.git",
   "main": "index.js",
