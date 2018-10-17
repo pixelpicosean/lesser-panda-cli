@@ -168,7 +168,7 @@ function server(gameDir, port, param) {
   };
 
   if (es5) {
-    config.module.rules.push(es5Loader(gameDir));
+    config.module.rules.unshift(es5Loader(gameDir));
   }
 
   // Need to launch editor?

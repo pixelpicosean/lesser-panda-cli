@@ -5,6 +5,8 @@ const path = require('path');
 const webpack = require('webpack');
 const rimraf = require('rimraf');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const Obfuscator = require('webpack-obfuscator');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const colors = require('colors/safe');
@@ -12,12 +14,17 @@ const cliPrefix = require('./utils').cliPrefix;
 
 const es5Loader = require('./es5Loader');
 
+const copyFileList = [
+  { from: 'media', to: 'media' },
+];
+
 function build(gameDir, callback, param) {
   console.log(`${cliPrefix} Start to build...`);
 
   const es5 = (param.indexOf('-es5') >= 0);
   const engine_lib = (param.indexOf('-lib') >= 0);
   const bundle_analyze = (param.indexOf('-analyze') >= 0);
+  const obfuscate = (param.indexOf('-obfuscate') >= 0);
 
   const config = {
     mode: 'production',
@@ -33,6 +40,7 @@ function build(gameDir, callback, param) {
         template: path.resolve(gameDir, 'index.html'),
         inject: 'body',
       }),
+      new CopyWebpackPlugin(copyFileList),
     ],
     module: {
       rules: [
@@ -152,6 +160,10 @@ function build(gameDir, callback, param) {
       // name of the global var: "v"
       library: "v",
     };
+  }
+
+  if (obfuscate) {
+    config.plugins.push(new Obfuscator({}))
   }
 
   if (bundle_analyze) {
