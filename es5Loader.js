@@ -14,10 +14,7 @@ module.exports = function(gameDir) {
         loader: require.resolve('babel-loader'),
         options: {
           presets: [
-            [require.resolve('babel-preset-env'), { loose: true }],
-          ],
-          plugins: [
-            [require.resolve('babel-plugin-transform-strict-mode'), { strict: true }],
+            [require.resolve('@babel/preset-env'), { loose: true }],
           ],
         },
       },

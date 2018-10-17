@@ -20,6 +20,7 @@ function build(gameDir, callback, param) {
   const bundle_analyze = (param.indexOf('-analyze') >= 0);
 
   const config = {
+    mode: 'production',
     entry: {
       game: path.resolve(gameDir, 'src/game/main.js'),
     },
@@ -137,7 +138,7 @@ function build(gameDir, callback, param) {
 
   // Need to transpile to ES5?
   if (es5) {
-    config.module.rules.push(es5Loader(gameDir));
+    config.module.rules.unshift(es5Loader(gameDir));
   }
 
   if (engine_lib) {
@@ -159,14 +160,19 @@ function build(gameDir, callback, param) {
 
   // Cleanup dist folder before compile
   rimraf(path.resolve(gameDir, 'dist'), function(err) {
-    // Compile and build JavaScript
-    const compiler = webpack(config);
-    compiler.run(function(err, stats) {
-      if (err) {
-        callback(err);
-      }
-      console.log(`${cliPrefix} ${colors.green('Build complete!')}`);
-    });
+    if (err) {
+      console.log(err);
+      console.log(`${colors.red('Build failed!')}`);
+    } else {
+      // Compile and build JavaScript
+      const compiler = webpack(config);
+      compiler.run(function (err, stats) {
+        if (err) {
+          callback(err);
+        }
+        console.log(`${cliPrefix} ${colors.green('Build complete!')}`);
+      });
+    }
   });
 }
 
