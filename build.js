@@ -5,6 +5,7 @@ const path = require('path');
 const webpack = require('webpack');
 const rimraf = require('rimraf');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const colors = require('colors/safe');
 const cliPrefix = require('./utils').cliPrefix;
@@ -16,6 +17,7 @@ function build(gameDir, callback, param) {
 
   const es5 = (param.indexOf('-es5') >= 0);
   const engine_lib = (param.indexOf('-lib') >= 0);
+  const bundle_analyze = (param.indexOf('-analyze') >= 0);
 
   const config = {
     entry: {
@@ -149,6 +151,10 @@ function build(gameDir, callback, param) {
       // name of the global var: "v"
       library: "v",
     };
+  }
+
+  if (bundle_analyze) {
+    config.plugins.push(new BundleAnalyzerPlugin());
   }
 
   // Cleanup dist folder before compile

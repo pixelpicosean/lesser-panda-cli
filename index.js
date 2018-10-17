@@ -1,7 +1,7 @@
 'use strict';
 
 const commands = {
-  build: 'Build project to "dist" folder, "-es5" to transpile for ES5',
+  build: 'Build project to "dist" folder, "-es5" to transpile for ES5, "-lib" for engine only bundle, "-analyze" for bundle analyze',
   create: 'Create new project',
   // update: 'Update engine',
   server: 'Start a dev server, "-es5" to enable transpile to ES5, otherwise you need a ES2015 capatable browser',
