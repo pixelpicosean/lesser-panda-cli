@@ -1,11 +1,10 @@
 'use strict';
 
 const path = require('path');
+const fs = require('fs-extra');
 
 const webpack = require('webpack');
-const rimraf = require('rimraf');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Obfuscator = require('webpack-obfuscator');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -13,10 +12,6 @@ const colors = require('colors/safe');
 const cliPrefix = require('./utils').cliPrefix;
 
 const es5Loader = require('./es5Loader');
-
-const copyFileList = [
-  { from: 'media', to: 'media' },
-];
 
 function build(gameDir, callback, param) {
   console.log(`${cliPrefix} Start to build...`);
@@ -40,7 +35,6 @@ function build(gameDir, callback, param) {
         template: path.resolve(gameDir, 'index.html'),
         inject: 'body',
       }),
-      new CopyWebpackPlugin(copyFileList),
     ],
     module: {
       rules: [
@@ -170,22 +164,39 @@ function build(gameDir, callback, param) {
     config.plugins.push(new BundleAnalyzerPlugin());
   }
 
-  // Cleanup dist folder before compile
-  rimraf(path.resolve(gameDir, 'dist'), function(err) {
-    if (err) {
-      console.log(err);
-      console.log(`${colors.red('Build failed!')}`);
-    } else {
-      // Compile and build JavaScript
+  const target_dir = path.resolve(gameDir, 'dist');
+  const copy_ignores = ['.DS_Store'];
+
+  const build_error = (err) => {
+    console.log(err)
+    console.log(`\n${cliPrefix} ${colors.red('Build failed!')}`);
+  }
+
+  // Clean up contents of the target dir
+  fs.emptyDir(target_dir)
+    .then(() => {
+      // Build with webpack
       const compiler = webpack(config);
-      compiler.run(function (err, stats) {
+      compiler.run(function(err, stats) {
         if (err) {
-          callback(err);
+          build_error(err);
+          return;
         }
-        console.log(`${cliPrefix} ${colors.green('Build complete!')}`);
+
+        console.log(`${cliPrefix} ${colors.yellow('Copy media...')}`);
+
+        fs.copy(path.resolve(gameDir, 'media'), path.resolve(gameDir, 'dist/media'), {
+          filter: (src, dest) => {
+            return copy_ignores.indexOf(path.basename(src)) < 0;
+          }
+        })
+        .then(() => {
+          console.log(`${cliPrefix} ${colors.green('Build complete!')}`);
+        })
+        .catch(build_error)
       });
-    }
-  });
+    })
+    .catch(build_error)
 }
 
 module.exports = build;
