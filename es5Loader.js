@@ -16,6 +16,9 @@ module.exports = function(gameDir) {
           presets: [
             [require.resolve('@babel/preset-env'), { loose: true }],
           ],
+          "plugins": [
+            require.resolve("@babel/plugin-transform-runtime"),
+          ],
         },
       },
     ],
