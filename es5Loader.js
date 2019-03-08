@@ -13,11 +13,12 @@ module.exports = function(gameDir) {
       {
         loader: require.resolve('babel-loader'),
         options: {
+          // "sourceType": "unambiguous", // enable this for commmonjs support
           presets: [
-            [require.resolve('babel-preset-env'), { loose: true }],
+            [require.resolve('@babel/preset-env'), { loose: true }],
           ],
-          plugins: [
-            [require.resolve('babel-plugin-transform-strict-mode'), { strict: true }],
+          "plugins": [
+            require.resolve("@babel/plugin-transform-runtime"),
           ],
         },
       },
