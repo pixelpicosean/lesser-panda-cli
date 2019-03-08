@@ -10,10 +10,22 @@ const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const watch = require('node-watch');
+const fs = require('fs-extra');
+
 const colors = require('colors/safe');
 const cliPrefix = require('./utils').cliPrefix;
 
 const es5Loader = require('./es5Loader');
+
+// File with these extensions in `assets/image/standalone` will be copied to media
+// during building process
+const standalone_copy_exts = [
+  '.png',
+  '.tiff',
+  '.jpg',
+  '.jpeg',
+];
 
 function getIPAddress() {
   const interfaces = require('os').networkInterfaces();
@@ -211,6 +223,27 @@ function server(gameDir, port, param) {
     console.log(`   External: ${colors.magenta('http://' + fullAddress)}`);
     console.log(colors.grey('--------------------------------------'));
   });
+
+  const standalone_path = path.resolve(gameDir, 'assets/image/standalone');
+
+  const copy_standalone_images_to_media = (image_url) => {
+    fs.copyFileSync(image_url, path.resolve(gameDir, 'media', path.basename(image_url)));
+  }
+
+  // Watch `standalone` folder changes, and copy/delete images to `media`
+  if (fs.existsSync(standalone_path)) {
+    watch(standalone_path, { recursive: true }, (evt, name) => {
+      if (standalone_copy_exts.indexOf(path.extname(name)) < 0) {
+        return;
+      }
+
+      if (evt === 'update') {
+        copy_standalone_images_to_media(name);
+      } else if (evt === 'remove') {
+        fs.removeSync(path.resolve(gameDir, 'media', path.basename(name)));
+      }
+    })
+  }
 }
 
 module.exports = function(gameDir, callback, param) {
