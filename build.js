@@ -13,6 +13,20 @@ const cliPrefix = require('./utils').cliPrefix;
 
 const es5Loader = require('./es5Loader');
 
+// List of ignored files that won't be copied to media folder
+const copy_ignores = [
+  '.DS_Store',
+];
+
+// File with these extensions in `assets/image/standalone` will be copied to media
+// during building process
+const standalone_copy_exts = [
+  '.png',
+  '.tiff',
+  '.jpg',
+  '.jpeg',
+];
+
 function build(gameDir, callback, param) {
   console.log(`${cliPrefix} Start to build...`);
 
@@ -165,7 +179,6 @@ function build(gameDir, callback, param) {
   }
 
   const target_dir = path.resolve(gameDir, 'dist');
-  const copy_ignores = ['.DS_Store'];
 
   const build_error = (err) => {
     console.log(err)
@@ -175,6 +188,8 @@ function build(gameDir, callback, param) {
   // Clean up contents of the target dir
   fs.emptyDir(target_dir)
     .then(() => {
+      console.log(`${cliPrefix} ${colors.yellow('Compile scripts...')}`);
+
       // Build with webpack
       const compiler = webpack(config);
       compiler.run(function(err, stats) {
@@ -183,17 +198,38 @@ function build(gameDir, callback, param) {
           return;
         }
 
+        // Start to copy resources
         console.log(`${cliPrefix} ${colors.yellow('Copy media...')}`);
 
-        fs.copy(path.resolve(gameDir, 'media'), path.resolve(gameDir, 'dist/media'), {
-          filter: (src, dest) => {
-            return copy_ignores.indexOf(path.basename(src)) < 0;
-          }
-        })
-        .then(() => {
+        const standalone_path = path.resolve(gameDir, 'assets/image/standalone');
+
+        const copy_standalone_images_to_media = () => {
+          fs.readdirSync(standalone_path)
+            .filter(src => standalone_copy_exts.indexOf(path.extname(src).toLowerCase()) >= 0)
+            .forEach(file => {
+              fs.copyFileSync(path.resolve(standalone_path, file), path.resolve(gameDir, 'media', file));
+            })
+        }
+        const copy_media_to_dist = () => (
+          fs.copy(path.resolve(gameDir, 'media'), path.resolve(gameDir, 'dist/media'), {
+            filter: (src, dest) => {
+              return copy_ignores.indexOf(path.basename(src)) < 0;
+            }
+          })
+        )
+        const report_copy_complete = () => {
           console.log(`${cliPrefix} ${colors.green('Build complete!')}`);
-        })
-        .catch(build_error)
+        }
+
+        // Copy images in the `standalone` folder if exist
+        if (fs.pathExistsSync(standalone_path)) {
+          copy_standalone_images_to_media();
+        }
+
+        // Copy
+        copy_media_to_dist()
+          .then(report_copy_complete)
+          .catch(build_error)
       });
     })
     .catch(build_error)
