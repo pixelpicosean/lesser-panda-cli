@@ -1,6 +1,6 @@
 {
   "name": "voltar-cli",
-  "version": "0.7.7",
+  "version": "0.7.8",
   "description": "Command line toolkit for Voltar engine",
   "repository": "https://github.com/pixelpicosean/voltar-cli.git",
   "main": "index.js",
@@ -23,7 +23,7 @@
     "object-assign": "^4.1.1",
     "pixi-gl-core": "^1.1.4",
     "portfinder": "^1.0.20",
-    "raw-loader": "^1.0.0",
+    "raw-loader": "^2.0.0",
     "remove-array-items": "^2.0.0",
     "resource-loader": "^2.2.3",
     "style-loader": "^0.23.1",
