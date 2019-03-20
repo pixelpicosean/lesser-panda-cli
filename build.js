@@ -31,6 +31,8 @@ function build(gameDir, callback, param) {
   console.log(`${cliPrefix} Start to build...`);
 
   const es5 = (param.indexOf('-es5') >= 0);
+  const cjs = (param.indexOf('-cjs') >= 0);
+
   const engine_lib = (param.indexOf('-lib') >= 0);
   const bundle_analyze = (param.indexOf('-analyze') >= 0);
   const obfuscate = (param.indexOf('-obfuscate') >= 0);
@@ -152,9 +154,8 @@ function build(gameDir, callback, param) {
     },
   };
 
-  // Need to transpile to ES5?
   if (es5) {
-    config.module.rules.unshift(es5Loader(gameDir));
+    config.module.rules.unshift(es5Loader(gameDir, cjs));
   }
 
   if (engine_lib) {
@@ -165,8 +166,8 @@ function build(gameDir, callback, param) {
       path: path.resolve(gameDir, 'dist'),
       // export itself to a global var
       libraryTarget: "var",
-      // name of the global var: "v"
-      library: "v",
+      // name of the global var: "voltar"
+      library: "voltar",
     };
   }
 

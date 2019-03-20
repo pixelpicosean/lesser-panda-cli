@@ -46,7 +46,6 @@ function server(gameDir, port, param) {
   const fullAddress = `${ipAddress}:${port}`;
 
   const es5 = (param.indexOf('-es5') >= 0);
-  const hasEditor = (param.indexOf('-editor') >= 0);
 
   const config = {
     mode: 'development',
@@ -180,17 +179,7 @@ function server(gameDir, port, param) {
   };
 
   if (es5) {
-    config.module.rules.unshift(es5Loader(gameDir));
-  }
-
-  // Need to launch editor?
-  if (hasEditor) {
-    config.entry['editor'] = [
-      // Live-reload
-      `webpack-dev-server/client?http://${fullAddress}`,
-      // Editor entry
-      path.resolve(gameDir, 'src/editor/index.js'),
-    ];
+    config.module.rules.unshift(es5Loader(gameDir, cjs));
   }
 
   const compiler = webpack(config);
@@ -216,8 +205,8 @@ function server(gameDir, port, param) {
   });
 
   devServer.listen(port, null, function() {
-    console.log(cliPrefix + colors.green(' Server(v' + require('./package.json').version + ') is starting...'));
-    console.log(cliPrefix + colors.bold(' Access URLS:'));
+    console.log(cliPrefix + colors.green(` Server(v${require('./package.json').version} is starting...`));
+    console.log(cliPrefix + colors.bold(` Access URLS:`));
     console.log(colors.grey('--------------------------------------'));
     console.log(`      Local: ${colors.magenta('http://localhost:' + port)}`);
     console.log(`   External: ${colors.magenta('http://' + fullAddress)}`);

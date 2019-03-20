@@ -2,23 +2,29 @@
 
 const path = require('path');
 
-module.exports = function(gameDir) {
+module.exports = function(gameDir, support_common_js) {
   return {
     test: /\.js$/,
     include: path.resolve(gameDir, 'src'),
-    exclude: [
-      path.resolve(gameDir, 'src/engine/polyfill'),
-    ],
     use: [
       {
         loader: require.resolve('babel-loader'),
         options: {
-          // "sourceType": "unambiguous", // enable this for commmonjs support
+          "sourceType": support_common_js ? "unambiguous" : undefined, // enable this for commmonjs support
           presets: [
-            [require.resolve('@babel/preset-env'), { loose: true }],
+            [
+              require.resolve('@babel/preset-env'), {
+                // loose mode for performance
+                loose: true,
+                // https://github.com/browserslist/browserslist#best-practices
+                targets: "last 2 versions, not dead, > 0.25%",
+              },
+            ],
           ],
           "plugins": [
-            require.resolve("@babel/plugin-transform-runtime"),
+            [
+              require.resolve("@babel/plugin-transform-runtime")
+            ],
           ],
         },
       },
