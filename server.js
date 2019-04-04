@@ -236,6 +236,14 @@ function server(gameDir, port, param) {
 }
 
 module.exports = function(gameDir, callback, param) {
+  if (param.indexOf('-p') >= 0 || param.indexOf('--port') >= 0) {
+    const port_idx = Math.max(param.indexOf('-p'), param.indexOf('--port')) + 1;
+    const port = parseInt(param[port_idx]);
+    if (Number.isFinite(port)) {
+      portfinder.basePort = port;
+    }
+  }
+
   portfinder.getPort(function(err, realPort) {
     if (err) {
       callback(err);
