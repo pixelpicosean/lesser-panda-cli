@@ -51,9 +51,6 @@ function server(gameDir, port, param) {
     mode: 'development',
     entry: {
       game: [
-        // Live-reload
-        `webpack-dev-server/client?http://${fullAddress}`,
-        // Game entry
         path.resolve(gameDir, 'src/game/main.js'),
       ],
     },
@@ -62,9 +59,6 @@ function server(gameDir, port, param) {
       filename: '[name].js',
     },
     devtool: 'source-map',
-    devServer: {
-      contentBase: gameDir,
-    },
     module: {
       rules: [
         // Shaders
@@ -163,6 +157,7 @@ function server(gameDir, port, param) {
         path.join(gameDir, 'assets'),
         path.join(gameDir, 'node_modules'),
         path.join(__dirname, 'node_modules'),
+        path.join(process.cwd(), 'node_modules'),
       ],
     },
     optimization: {
@@ -192,6 +187,7 @@ function server(gameDir, port, param) {
     lazy: false,
 
     disableHostCheck: true,
+    contentBase: gameDir,
 
     stats: {
       assets: false,
@@ -205,7 +201,7 @@ function server(gameDir, port, param) {
   });
 
   devServer.listen(port, null, function() {
-    console.log(cliPrefix + colors.green(` Server(v${require('./package.json').version} is starting...`));
+    console.log(cliPrefix + colors.green(` Server(v${require('./package.json').version}) is starting...`));
     console.log(cliPrefix + colors.bold(` Access URLS:`));
     console.log(colors.grey('--------------------------------------'));
     console.log(`      Local: ${colors.magenta('http://localhost:' + port)}`);
@@ -236,6 +232,14 @@ function server(gameDir, port, param) {
 }
 
 module.exports = function(gameDir, callback, param) {
+  if (param.indexOf('-p') >= 0 || param.indexOf('--port') >= 0) {
+    const port_idx = Math.max(param.indexOf('-p'), param.indexOf('--port')) + 1;
+    const port = parseInt(param[port_idx]);
+    if (Number.isFinite(port)) {
+      portfinder.basePort = port;
+    }
+  }
+
   portfinder.getPort(function(err, realPort) {
     if (err) {
       callback(err);

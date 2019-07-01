@@ -26,6 +26,7 @@ Any Node.js version that supports **ES6** should work, `v7.0.0+` tested.
 
 - `voltar server`: by default **ES6** capatable browser is required, but rebuild pretty fast
 - `voltar server -es5`: transpile to **ES5** on every single change, rebuild is slower but should work in any browsers without issue.
+- `voltar server -p 3000`: set server port (either `-p 3000` or `--port 3000`)
 
 ### Build production bundle
 
