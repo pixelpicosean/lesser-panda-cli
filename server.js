@@ -51,9 +51,6 @@ function server(gameDir, port, param) {
     mode: 'development',
     entry: {
       game: [
-        // Live-reload
-        `webpack-dev-server/client?http://${fullAddress}`,
-        // Game entry
         path.resolve(gameDir, 'src/game/main.js'),
       ],
     },
