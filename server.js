@@ -62,9 +62,6 @@ function server(gameDir, port, param) {
       filename: '[name].js',
     },
     devtool: 'source-map',
-    devServer: {
-      contentBase: gameDir,
-    },
     module: {
       rules: [
         // Shaders
@@ -163,6 +160,7 @@ function server(gameDir, port, param) {
         path.join(gameDir, 'assets'),
         path.join(gameDir, 'node_modules'),
         path.join(__dirname, 'node_modules'),
+        path.join(process.cwd(), 'node_modules'),
       ],
     },
     optimization: {
@@ -192,6 +190,7 @@ function server(gameDir, port, param) {
     lazy: false,
 
     disableHostCheck: true,
+    contentBase: gameDir,
 
     stats: {
       assets: false,
@@ -205,7 +204,7 @@ function server(gameDir, port, param) {
   });
 
   devServer.listen(port, null, function() {
-    console.log(cliPrefix + colors.green(` Server(v${require('./package.json').version} is starting...`));
+    console.log(cliPrefix + colors.green(` Server(v${require('./package.json').version}) is starting...`));
     console.log(cliPrefix + colors.bold(` Access URLS:`));
     console.log(colors.grey('--------------------------------------'));
     console.log(`      Local: ${colors.magenta('http://localhost:' + port)}`);
