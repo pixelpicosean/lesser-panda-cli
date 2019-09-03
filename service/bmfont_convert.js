@@ -59,7 +59,7 @@ function get_lines_with_tag(data, tag) {
  * @param {string} line
  * @param {boolean} [close]
  */
-function line_to_xml(line, close = false) {
+function line_to_xml(line, close = true) {
     if (!line) {
         return `<error>line is empty</error>`
     }
@@ -107,7 +107,7 @@ function convert(bmfont) {
             ${line_to_xml(get_line_with_tag(data, 'page'))}
         </pages>
         ${line_to_xml(get_line_with_tag(data, 'chars'), false)}
-${get_lines_with_tag(data, 'char').map((line) => force_indent(line_to_xml(line), 3)).join('\n')}
+${get_lines_with_tag(data, 'char').map((line) => force_indent(line_to_xml(line, false), 3)).join('\n')}
         </chars>
     </font>
 `
