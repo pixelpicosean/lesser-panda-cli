@@ -106,7 +106,7 @@ function convert(bmfont) {
         <pages>
             ${line_to_xml(get_line_with_tag(data, 'page'))}
         </pages>
-        ${line_to_xml(get_line_with_tag(data, 'chars'), false)}
+        ${line_to_xml(get_line_with_tag(data, 'chars'), true)}
 ${get_lines_with_tag(data, 'char').map((line) => force_indent(line_to_xml(line, false), 3)).join('\n')}
         </chars>
     </font>
