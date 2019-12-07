@@ -17,7 +17,11 @@ module.exports = function(gameDir, support_common_js) {
                 // loose mode for performance
                 loose: true,
                 // https://github.com/browserslist/browserslist#best-practices
-                targets: "last 2 versions, not dead, > 0.25%",
+                targets: [
+                  "last 2 major versions",
+                  "> 0.2%",
+                  "not dead",
+                ],
               },
             ],
           ],
