@@ -14,6 +14,7 @@ const colors = require('colors/safe');
 const cliPrefix = require('./utils').cliPrefix;
 
 const es5Loader = require('./es5Loader');
+const tsLoader = require('./tsLoader');
 
 const services = [
   require('./service/standalone_image_sync'),
@@ -39,12 +40,13 @@ function server(gameDir, port, param) {
   const fullAddress = `${ipAddress}:${port}`;
 
   const es5 = (param.indexOf('-es5') >= 0);
+  const ts = (param.indexOf('-ts') >= 0);
 
   const config = {
     mode: 'development',
     entry: {
       game: [
-        path.resolve(gameDir, 'src/game/main.js'),
+        path.resolve(gameDir, `src/game/main.${ts ? "ts" : "js"}`),
       ],
     },
     output: {
@@ -168,6 +170,8 @@ function server(gameDir, port, param) {
 
   if (es5) {
     config.module.rules.unshift(es5Loader(gameDir, cjs));
+  } else if (ts) {
+    config.module.rules.unshift(tsLoader(gameDir));
   }
 
   const compiler = webpack(config);
@@ -186,7 +190,7 @@ function server(gameDir, port, param) {
   });
 
   devServer.listen(port, null, function() {
-    console.log(cliPrefix + colors.green(` Server(v${require('./package.json').version}) is starting...`));
+    console.log(cliPrefix + colors.green(` Server(v${require('./package.json').version}${ts ? "- TypeScript" : ""}) is starting...`));
     console.log(cliPrefix + colors.bold(` Access URLS:`));
     console.log(colors.grey('--------------------------------------'));
     console.log(`      Local: ${colors.magenta('http://localhost:' + port)}`);

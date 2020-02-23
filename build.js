@@ -12,6 +12,7 @@ const colors = require('colors/safe');
 const cliPrefix = require('./utils').cliPrefix;
 
 const es5Loader = require('./es5Loader');
+const tsLoader = require('./tsLoader');
 
 // List of ignored files that won't be copied to media folder
 const copy_ignores = [
@@ -31,6 +32,7 @@ function build(gameDir, callback, param) {
   console.log(`${cliPrefix} Start to build...`);
 
   const es5 = (param.indexOf('-es5') >= 0);
+  const ts = (param.indexOf('-ts') >= 0);
   const cjs = (param.indexOf('-cjs') >= 0);
 
   const engine_lib = (param.indexOf('-lib') >= 0);
@@ -157,6 +159,8 @@ function build(gameDir, callback, param) {
 
   if (es5) {
     config.module.rules.unshift(es5Loader(gameDir, cjs));
+  } else if (ts) {
+    config.module.rules.unshift(tsLoader(gameDir));
   }
 
   if (engine_lib) {
