@@ -147,6 +147,7 @@ function build(gameDir, callback, param) {
       ],
     },
     resolve: {
+      extensions: ts ? ['.js', '.ts'] : ['.js'],
       modules: [
         path.join(gameDir, 'src'),
         path.join(gameDir, 'assets'),
