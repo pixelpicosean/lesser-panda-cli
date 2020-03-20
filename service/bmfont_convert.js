@@ -64,7 +64,36 @@ function line_to_xml(line, close = true) {
         return `<error>line is empty</error>`
     }
 
-    const segments = line.split(' ')
+    let segments = line.split(' ')
+    segments = (() => {
+        /** @type {string[]} */
+        let new_segments = []
+
+        let continues_seg = ''
+        for (let i = 0; i < segments.length; i++) {
+            const seg = segments[i]
+            const count = (seg.match(/"/g) || []).length
+            if (count % 2) {
+                if (continues_seg.length === 0) {
+                    /* begin */
+                    continues_seg = seg
+                } else if ((continues_seg.match(/"/g).length + count) % 2) {
+                    /* not end yet */
+                    continues_seg = continues_seg + ' ' + seg
+                } else {
+                    /* end */
+                    continues_seg = continues_seg + ' ' + seg
+                    new_segments.push(continues_seg)
+
+                    continues_seg = ''
+                }
+            } else {
+                new_segments.push(seg)
+            }
+        }
+
+        return new_segments
+    })()
     const tag = segments[0]
     const attr_pairs = segments
         .filter((_, i) => (i > 0))
