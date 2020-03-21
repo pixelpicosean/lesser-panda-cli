@@ -42,7 +42,9 @@ function build(gameDir, callback, param) {
   const config = {
     mode: 'production',
     entry: {
-      game: path.resolve(gameDir, 'src/game/main.js'),
+      game: [
+        path.resolve(gameDir, `src/game/main.${ts ? "ts" : "js"}`),
+      ],
     },
     output: {
       path: path.resolve(gameDir, 'dist'),
