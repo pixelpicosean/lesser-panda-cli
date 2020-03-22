@@ -88,7 +88,7 @@ function build(gameDir, callback, param) {
             {
               loader: require.resolve('url-loader'),
               options: {
-                limit: 10000,
+                limit: 20000,
               },
             },
           ],
