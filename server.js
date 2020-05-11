@@ -170,7 +170,7 @@ function server(gameDir, port, param) {
   };
 
   if (es5) {
-    config.module.rules.unshift(es5Loader(gameDir, cjs));
+    config.module.rules.unshift(es5Loader(gameDir));
   } else if (ts) {
     config.module.rules.unshift(tsLoader(gameDir));
   }

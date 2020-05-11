@@ -239,6 +239,7 @@ function build(gameDir, callback, param) {
         copy_media_to_dist()
           .then(report_copy_complete)
           .catch(build_error)
+        fs.copyFileSync(path.resolve(gameDir, 'fonts.css'), path.resolve(gameDir, 'dist/fonts.css'))
       });
     })
     .catch(build_error)
